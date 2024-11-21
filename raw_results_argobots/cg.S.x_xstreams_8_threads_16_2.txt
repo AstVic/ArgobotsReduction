@@ -1,0 +1,57 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-OMP-C) - CG Benchmark
+
+ Size:        1400
+ Iterations:                     15
+ Number of available xstreams:     8
+ Number of available threads:     16
+
+ Initialization time =           0.021 seconds
+
+   iteration           ||r||                 zeta
+        1       1.37091730898432E-13     9.9986441579140
+        2       2.10043173839944E-15     8.5733279203222
+        3       2.15472524201738E-15     8.5954510374058
+        4       1.91470239953577E-15     8.5969972340738
+        5       1.96834389025743E-15     8.5971549151767
+        6       1.96491238766450E-15     8.5971744311608
+        7       1.85809441285890E-15     8.5971770704913
+        8       1.88102051352430E-15     8.5971774440630
+        9       2.03011454243585E-15     8.5971774983942
+       10       1.77828774306457E-15     8.5971775064409
+       11       1.78653384469432E-15     8.5971775076486
+       12       1.89368804255863E-15     8.5971775078318
+       13       1.79735450887673E-15     8.5971775078598
+       14       1.83622998687572E-15     8.5971775078641
+       15       1.79871883249476E-15     8.5971775078648
+ Benchmark completed
+ VERIFICATION SUCCESSFUL
+ Zeta is     8.5971775078648E+00
+ Error is    1.2397255990878E-15
+
+
+ CG Benchmark Completed.
+ Class           =                        S
+ Size            =                     1400
+ Iterations      =                       15
+ Time in seconds =                     0.11
+ Total threads   =                        1
+ Avail threads   =                        1
+ Mop/s total     =                   592.96
+ Mop/s/thread    =                   592.96
+ Operation type  =           floating point
+ Verification    =               SUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              21 Nov 2024
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm -L ~/argobots-install/lib -labt
+    C_INC        = -I../common -I ~/argobots-install/include
+    CFLAGS       = -g -Wall -O3 -mcmodel=medium -I ~/argobots-...
+    CLINKFLAGS   = -O3 -mcmodel=medium -I ~/argobots-install/i...
+    RAND         = randdp
+
+--------------------------------------
