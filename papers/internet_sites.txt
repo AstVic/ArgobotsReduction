@@ -1,0 +1,5 @@
+https://rakyll.org/scheduler/
+
+https://habr.com/ru/articles/743266/
+
+https://www.kelche.co/blog/go/golang-scheduling/
