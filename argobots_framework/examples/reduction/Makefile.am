@@ -4,11 +4,11 @@
 #
 
 TESTS = \
-	reduction_sum 
+	reduction
 
 check_PROGRAMS = $(TESTS)
 noinst_PROGRAMS = $(TESTS)
 
 include $(top_srcdir)/examples/Makefile.mk
 
-reduction_sum_SOURCES = reduction_sum.c
+reduction_SOURCES = reduction.c abt_reduction.c
