@@ -1172,6 +1172,7 @@ AC_CONFIG_FILES([Makefile
                  examples/fibonacci/Makefile
                  examples/hello_world/Makefile
                  examples/reduction/Makefile
+                 examples/workstealing_scheduler/Makefile
                  examples/profiling/Makefile
                  examples/scheduling/Makefile
                  examples/stencil/Makefile])
