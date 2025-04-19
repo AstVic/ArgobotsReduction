@@ -1,0 +1,32 @@
+Pure C NAS CG Benchmark Results
+=========================
+
+Configuration: Class=S, Xstreams=1, Threads=1
+Mean Time: .03666666666666666666 seconds
+Mean Time Nanos: 35270341.98333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=1, Threads=1
+Mean Time: .24333333333333333333 seconds
+Mean Time Nanos: 244534736.50000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=1, Threads=1
+Mean Time: 1.01333333333333333333 seconds
+Mean Time Nanos: 1014211547.25000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=1, Threads=1
+Mean Time: 42.46333333333333333333 seconds
+Mean Time Nanos: 42469428670.90333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=1, Threads=1
+Mean Time: 139.93666666666666666666 seconds
+Mean Time Nanos: 139946132399.14333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
