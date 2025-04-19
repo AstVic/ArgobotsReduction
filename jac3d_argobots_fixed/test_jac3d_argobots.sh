@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compile the program with optimization
-gcc -O3 -o jac3d jac3d.c abt_reduction.c -labt -lm -I ~/argobots-install/include -L ~/argobots-install/libabt.so
+gcc -O3 -o jac3d jac3d.c abt_reduction.c /home/student_5/ryabykin_vlad/argobots-install/lib/libabt.so -lm -I /home/student_5/ryabykin_vlad/argobots-install/include
 if [ $? -ne 0 ]; then
     echo "Compilation failed!"
     exit 1
@@ -26,7 +26,7 @@ UNSUCCESSFUL_COUNT=0
 
 
 # Configuration arrays
-XSTREAMS=(1 2 4 7 8 14)
+XSTREAMS=(1 2 4 7 8 14 28)
 THREADS=(1 2 4 7 8 14 28)
 NUM_RUNS=3
 
