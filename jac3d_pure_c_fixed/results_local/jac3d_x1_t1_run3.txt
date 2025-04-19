@@ -1,8 +1,8 @@
  Jacobi3D Benchmark Completed.
  Size            =  384 x  384 x  384
  Iterations      =                100
- Time in seconds =              19.20
- Real time (nanos) =        19198924786
+ Time in seconds =              19.40
+ Real time (nanos) =        19400702791
  Operation type  =     floating point
  Verification    =         SUCCESSFUL
  EPS = 5.058044

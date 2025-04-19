@@ -2,7 +2,7 @@ Pure C Jacobi-3D Benchmark Results
 =========================
 
 Configuration: Xstreams=1, Threads=1
-Mean Time: 19.06666666666666666666 seconds
-Mean Time Nanos: 19067422443.00000000000000000000 nanoseconds
+Mean Time: 19.31666666666666666666 seconds
+Mean Time Nanos: 19318922519.33333333333333333333 nanoseconds
 Verification: SUCCESSFUL
 ------------------------
