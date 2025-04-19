@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <omp.h>
+#include <time.h>
 
 #define Max(a, b) ((a) > (b) ? (a) : (b))
 
@@ -21,6 +22,7 @@ float B[L][L][L];
 int main(int an, char **as)
 {
     double startt, endt;
+    clock_t start, end;
     
     /* Initialize arrays */
     #pragma omp parallel for collapse(3) private(i,j,k) schedule(static)
@@ -36,6 +38,7 @@ int main(int an, char **as)
             }
 
     startt = omp_get_wtime();
+    start = clock();
 
     /* iteration loop */
     for (it = 1; it <= ITMAX; it++)
@@ -94,11 +97,14 @@ int main(int an, char **as)
     }
 
     endt = omp_get_wtime();
+    end = clock();
+    double cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 
     printf(" Jacobi3D Benchmark Completed.\n");
     printf(" Size            = %4d x %4d x %4d\n", L, L, L);
     printf(" Iterations      =       %12d\n", ITMAX);
-    printf(" Time in seconds =       %12.2lf\n", endt - startt);
+    printf(" Time in seconds   =       %12.2lf\n", cpu_time_used);
+    printf(" Real time (nanos) =       %12.2lf\n", endt - startt);
     printf(" Operation type  =     floating point\n");
     printf(" Verification    =       %12s\n", (fabs(eps - 5.058044) < 1e-4 ? "SUCCESSFUL" : "UNSUCCESSFUL"));
 
