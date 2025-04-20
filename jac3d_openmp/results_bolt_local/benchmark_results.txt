@@ -1,0 +1,50 @@
+OpenMP Jacobi-3D Benchmark Results
+=========================
+
+Configuration: Xstreams=1, Threads=1
+Mean Time: 249.12333333333333333333 seconds
+Mean Time Nanos: 31.40000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Xstreams=2, Threads=1
+Mean Time: 134.84000000000000000000 seconds
+Mean Time Nanos: 17.02333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Xstreams=3, Threads=1
+Mean Time: 103.23000000000000000000 seconds
+Mean Time Nanos: 13.01666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Xstreams=4, Threads=1
+Mean Time: 85.20666666666666666666 seconds
+Mean Time Nanos: 10.78000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Xstreams=5, Threads=1
+Mean Time: 80.66333333333333333333 seconds
+Mean Time Nanos: 10.19333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Xstreams=6, Threads=1
+Mean Time: 61.86666666666666666666 seconds
+Mean Time Nanos: 7.81666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Xstreams=7, Threads=1
+Mean Time: 62.09666666666666666666 seconds
+Mean Time Nanos: 7.90000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Xstreams=8, Threads=1
+Mean Time: 60.90666666666666666666 seconds
+Mean Time Nanos: 7.73000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
