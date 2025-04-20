@@ -1,0 +1,62 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-OMP-C) - CG Benchmark
+
+ Size:        7000
+ Iterations:                     15
+
+ Initialization time =           0.023 seconds
+
+   iteration           ||r||                 zeta
+        1       8.36660026534076E+01    11.9997003727381
+        2       1.00000000000000E+00    10.3457275664058
+        3       1.00000000000000E+00    10.3617880137963
+        4       1.00000000000000E+00    10.3625416284965
+        5       1.00000000000000E+00    10.3625905854467
+        6       1.00000000000000E+00    10.3625946467087
+        7       1.00000000000000E+00    10.3625950398342
+        8       1.00000000000000E+00    10.3625950817269
+        9       1.00000000000000E+00    10.3625950864815
+       10       1.00000000000000E+00    10.3625950870452
+       11       1.00000000000000E+00    10.3625950871141
+       12       1.00000000000000E+00    10.3625950871227
+       13       1.00000000000000E+00    10.3625950871238
+       14       1.00000000000000E+00    10.3625950871240
+       15       1.00000000000000E+00    10.3625950871240
+ Benchmark completed
+ VERIFICATION SUCCESSFUL
+ Zeta is     1.0362595087124E+01
+ Error is    3.4284015238759E-16
+
+
+ CG Benchmark Completed.
+ Class           =                        W
+ Size            =                     7000
+ Iterations      =                       15
+ Time in seconds =               0.24
+ Real time (nanos) =              59246000.00
+ Total threads   =                        1
+ Avail threads   =                        1
+ Mop/s total     =                  7099.72
+ Mop/s/thread    =                  7099.72
+ Operation type  =           floating point
+ Verification    =               SUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              20 Apr 2025
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm -L /home/student_5/ryabykin_vlad/argobo...
+    C_INC        = -I../common -I /home/student_5/ryabykin_vla...
+    CFLAGS       = -g -Wall -O3 -I /home/student_5/ryabykin_vl...
+    CLINKFLAGS   = -O3 -I /home/student_5/ryabykin_vlad/argobo...
+    RAND         = randdp
+
+--------------------------------------
+ Please send all errors/feedbacks to:
+ Center for Manycore Programming
+ cmp@aces.snu.ac.kr
+ http://aces.snu.ac.kr
+--------------------------------------
+
