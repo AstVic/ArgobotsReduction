@@ -1,0 +1,63 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-OMP-C) - CG Benchmark
+
+ Size:       14000
+ Iterations:                     15
+ Number of available threads:     4
+
+ Initialization time =  1745341147.710 seconds
+
+   iteration           ||r||                 zeta
+        1       2.56348837537171E-13    19.9997581277040
+        2       2.56148268184052E-15    17.1140495745506
+        3       2.56133599110705E-15    17.1296668946143
+        4       2.57366084065213E-15    17.1302113581192
+        5       2.50792994918769E-15    17.1302338856353
+        6       2.56080024488966E-15    17.1302349879482
+        7       2.50989605801552E-15    17.1302350498916
+        8       2.50744352998759E-15    17.1302350537510
+        9       2.46435597330051E-15    17.1302350540101
+       10       2.46957439431260E-15    17.1302350540284
+       11       2.43778599089088E-15    17.1302350540298
+       12       2.49553860323379E-15    17.1302350540299
+       13       2.41516109672668E-15    17.1302350540299
+       14       2.42338101957117E-15    17.1302350540299
+       15       2.41574861885854E-15    17.1302350540299
+ Benchmark completed
+ VERIFICATION SUCCESSFUL
+ Zeta is     1.7130235054030E+01
+ Error is    5.2263371998924E-14
+
+
+ CG Benchmark Completed.
+ Class           =                        A
+ Size            =                    14000
+ Iterations      =                       15
+ Time in seconds =               8.71
+ Real time (nanos) =             1745341148024701184.00
+ Total threads   =                        4
+ Avail threads   =                        4
+ Mop/s total     =                     0.00
+ Mop/s/thread    =                     0.00
+ Operation type  =           floating point
+ Verification    =               SUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              22 Apr 2025
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm
+    C_INC        = -I../common
+    CFLAGS       = -g -Wall -O3 -fopenmp -mcmodel=medium
+    CLINKFLAGS   = -O3 -fopenmp -mcmodel=medium
+    RAND         = randdp
+
+--------------------------------------
+ Please send all errors/feedbacks to:
+ Center for Manycore Programming
+ cmp@aces.snu.ac.kr
+ http://aces.snu.ac.kr
+--------------------------------------
+
