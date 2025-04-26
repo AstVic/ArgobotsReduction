@@ -1,0 +1,10 @@
+./runtest bt-mz.B.x
+./runtest bt-mz.C.x
+./runtest bt-mz.A.x
+./runtest sp-mz.B.x
+./runtest sp-mz.C.x
+./runtest sp-mz.A.x
+ulimit -s unlimited
+./runtest lu-mz.B.x
+./runtest lu-mz.C.x
+./runtest lu-mz.A.x

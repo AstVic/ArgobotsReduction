@@ -1,0 +1,82 @@
+TYPEs="double int float char logical dcomplex"
+
+revers () { OUT=""; for s in $*; do  OUT="$s $OUT";  done; }
+
+#=================================================
+
+mod=npbparams.h
+cp $mod $mod.c
+
+mod=$mod.c
+
+sed -i "s/ *$//" $mod
+sed -i "s:^c://:" $mod
+sed -i "s/^     [^ ]/      /" $mod
+sed -i "s/^     ./      /" $mod
+
+sed -i "s/^[ \t]*parameter/parameter/" $mod
+
+LN=`sed -n "/^parameter.*[^)]$/=" $mod`
+revers $LN
+
+for ll in $OUT; do
+  PARs=`sed -n "$ll,/)/p" $mod`
+  sed -i "$ll,/)/ c\ `echo $PARs`" $mod
+  sed -i "s/^ *//" $mod
+done
+
+sed -i "/param/ s/,/\nparameter (/g" $mod
+sed -i "/param/ s/ *)$// " $mod
+sed -i "/param/ s/ *= */   /" $mod
+sed -i "/param/ s/'/\"/g" $mod
+
+
+sed -i "s/parameter *( */#define /" $mod
+
+sed -i "s/\.true\./true/" $mod
+sed -i "s/\.false\./false/" $mod
+
+sed -i 's/\([0-9 ]\.[0-9]*\)[dD]/\1E/g' $mod
+
+
+tt="integer"
+sed -i "/^[ \t]*$tt/d" $mod
+tt="double precision"
+sed -i "/^[ \t]*$tt/d" $mod
+tt="real"
+sed -i "/^[ \t]*$tt/d" $mod
+tt="character"
+sed -i "/^[ \t]*$tt/d" $mod
+tt="logical"
+sed -i "/^[ \t]*$tt/s/\.//g" $mod
+sed -i "/^[ \t]*$tt/d" $mod
+tt="dccomplex"
+sed -i "/^[ \t]*$tt/d" $mod
+
+#sed -i "s/integer /int /" $mod
+#sed -i "s/double precision /double /" $mod
+#sed -i "s/real /float /" $mod
+#sed -i "s/character /char /" $mod
+##sed -i "s/logical / /" $mod
+#sed -i "s/dccomplex /dcomplex /" $mod
+
+DD=`sed -n "s/#define *\([a-zA-Z0-9_]\+\) .*/\1/p" $mod`
+for nd in $DD; do
+    nd=`echo $nd | tr "[A-Z]" "[a-z]"`
+    NM=`echo $nd | tr "[a-z]" "[A-Z]"`
+    sed -i "s/\([^a-zA-Z0-9_]\)$nd\([^a-zA-Z0-9_]\)/\1$NM\2/g" $mod
+    sed -i "s/\([^a-zA-Z0-9_]\)$nd$/\1$NM/g" $mod
+done
+
+#sed -n "/#define [a-zA-Z][a-zA-Z0-9_]* [^\"]*$/p" $mod
+
+#DEF=`sed -n "/#define [a-zA-Z][a-zA-Z0-9_]* [^\"]*$/=" $mod`
+#for dd in $DEF; do
+#    LAG=`sed -n "$dd p" $mod | tr "a-z" "A-Z"`
+#    sed -i "$dd c\ $LAG" $mod
+#done
+
+#sed -i "s/\.TRUE\./true/" $mod
+#sed -i "s/\.FALSE\./false/" $mod
+#sed -i "s/ #DEFINE/#define/" $mod
+#cat $mod
