@@ -1,0 +1,35 @@
+#echo DIR=$0
+DIR=`echo $0 | sed "s/\/[^\/]*$//"`
+#echo DIR=$DIR
+mod1=$DIR/../config/make.def
+
+mod=npbparams.h
+
+test -f $mod && mv $mod ppp
+$DIR/setparams $1 $2
+test -f $mod || echo ERROR setparams || exit
+
+$DIR/f2c $mod
+sed -i "/CLASS/ s/\"/'/g" $mod.c
+mv $mod.c $mod
+
+CSs="CC CLINK C_LIB C_INC CFLAGS CLINKFLAGS"
+nn=0
+for cs in $CSs; do
+#sed -n "/^$cs  */p" $mod1
+    nn=`expr $nn + 1`
+    ss=`sed -n "s/^$cs[ \t]*= *\(.*\)$/\1/p" $mod1`
+    ss=`echo $ss | sed "s/\//%%/"`
+    sed -i "/#define CS$nn  */ s/\(#define CS$nn  *\).*/\1\"`echo $ss`\"/" $mod
+    sed -i "/#define CS$nn  */ s/%%/\//" $mod
+done
+
+test -f ppp || exit
+p=`diff ppp $mod`
+if [ "$p" == "" ]; then
+    mv ppp $mod
+else
+    rm ppp
+fi
+
+#exit

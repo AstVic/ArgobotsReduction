@@ -1,0 +1,7 @@
+icx -c -fPIC callback.c -o callback.o -qopenmp
+icpx -c -fPIC cppcallback.cpp -o cppcallback.o -qopenmp
+icpx -shared -fPIC -o callback.so callback.o cppcallback.o
+#OMP_TOOL_LIBRARIES=./callback.so <application>
+clang -c -fPIC callback.c -o callback.o -fopenmp
+clang++ -c -fPIC cppcallback.cpp -o cppcallback.o -fopenmp
+clang++  -shared -fPIC -o callback.so callback.o cppcallback.o

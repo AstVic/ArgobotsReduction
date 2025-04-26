@@ -1,0 +1,21 @@
+DIR=.
+DIR=`echo $0 | sed "s/\/[^\/]*$//"`
+#echo DIR=$DIR
+mod=npbparams.h
+
+test -f $mod && mv $mod ppp
+$DIR/setparams $1 $2
+test -f $mod || echo ERROR setparams || exit
+
+$DIR/f2c $mod
+sed -i "/CLASS/ s/\"/'/g" $mod.c
+mv $mod.c $mod
+
+test -f ppp || exit
+p=`diff ppp $mod`
+if [ "$p" == "" ]; then
+    mv ppp $mod
+else
+    rm ppp
+fi
+exit

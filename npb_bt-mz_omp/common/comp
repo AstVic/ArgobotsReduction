@@ -1,0 +1,3 @@
+icx -c -fPIC callback.c -o callback.o -qopenmp
+icx -shared -fPIC -o callback.so callback.o 
+#OMP_TOOL_LIBRARIES=./callback.so <application>

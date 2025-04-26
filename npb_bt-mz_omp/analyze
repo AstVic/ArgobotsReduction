@@ -1,0 +1,133 @@
+#!/usr/bin/perl
+if ($#ARGV == -1) {
+ print  "Please add filename as parameter!\n";
+ print  "./analyze <filename>";
+ exit;
+}
+my $maxthreads1=56;
+my $maxthreads2=56;
+my @programs = ('BT-MZ','LU-MZ','SP-MZ');
+my $file = shift (@ARGV);
+my @lines=`grep -a -v "Mop/s/thread" $file`; # Some tests doesn`t generate this parameter
+my @times = ();
+foreach my $program ( @programs ) {
+   my $wasFortran=0;
+   my $wasA=0;
+   my $wasB=0;
+   my $wasC=0;
+   foreach my $i ( 0 .. 1 ) { # C or Fortran
+     foreach my $j ( 0 .. 2 ) {  # Class A, B or C
+       foreach my $k ( 0 .. $maxthreads1 ) { # Number of threads (by Zone)
+          foreach my $l ( 0 .. $maxthreads2 ) {  # Number of threads (in one Zone)
+             $times[$i][$j][$k][$l]=0; # Time in seconds
+          }
+       } 
+     }
+   }
+   for (my $i = 0; $i <= $#lines; $i++) {
+       if (($lines[$i]=~m/^ $program Benchmark Completed/) &&
+        ($lines[$i+1]=~m/^ Class/) &&
+        ($lines[$i+2]=~m/^ Size/) &&
+        ($lines[$i+3]=~m/^ Iterations/) &&
+        ($lines[$i+4]=~m/^ Time in seconds/) &&
+        ($lines[$i+5]=~m/^ Total o_threads/) &&
+        ($lines[$i+6]=~m/^ Total threads/) &&
+        ($lines[$i+7]=~m/^ Mop\/s total/) &&
+        ($lines[$i+8]=~m/^ Operation type/) &&
+        ($lines[$i+9]=~m/^ Verification/) &&
+        ($lines[$i+10]=~m/^ Version/) &&
+        ($lines[$i+11]=~m/^ Compile date/) &&
+        ($lines[$i+13]=~m/^ Compile options:/)) {
+          if ($lines[$i+9]=~m/ SUCCESSFUL/) {
+            my $class=0;
+            my $compiler=0;
+            my $seconds=0;
+            my $o_threads=0;
+            my $threads=0;
+            if ($lines[$i+14]=~m/ CC/) {
+              $compiler=0;
+            } else {
+              $compiler=1;
+              $wasFortran=1;
+            }
+            if ($lines[$i+1]=~m/   A/) {
+              $class=0;
+              $wasA=1;
+            } else {
+              if ($lines[$i+1]=~m/   B/) {
+                 $class=1;
+                 $wasB=1;
+              } else {
+                 if ($lines[$i+1]=~m/   C/) {
+                     $class=2;
+                     $wasC=1;
+                }
+              }
+           }
+           $seconds=$1 if ($lines[$i+4] =~ /(\d+.\d+)/);
+           $o_threads=$1 if ($lines[$i+5] =~ /(\d+)/);
+           $threads=$1 if ($lines[$i+6] =~ /(\d+)/);
+           if ($o_threads > 0){
+              if ($threads == 0) { # Some test doesn`t calculate total threads (0)
+                 for (my $j = $i; ($j >= 0) && ($threads == 0); $j--) {
+                    $threads=$1 if ($lines[$j] =~ /OMP_NUM_THREADS=\d+ OMP_NUM_THREADS2=(\d+)/);
+                 }
+              } else {
+                 $threads=$threads/$o_threads;
+              }
+              if ($threads > 0) {
+                 $times[$compiler][$class][$o_threads][$threads]=$seconds;
+                 $times[$compiler][$class][0][$threads]=1; # It is necessary to generate this column in result table
+                 $times[$compiler][$class][$o_threads][0]=1;  # It is necessary to generate this row in result table
+              }
+          }
+       }
+     }
+   }
+   for (my $i = 0; $i <= 1; $i++) {
+     my $lang='';
+     if ($i ==0 ) {
+       $lang='c';
+     } else {
+       next if ($wasFortran==0);
+       $lang='fortran';
+     }
+     for (my $j = 0; $j <= 2; $j++) {
+       my $class='';
+       if ($j == 0 ) {
+         next if ($wasA==0);
+         $class='A';
+       } else {
+         if ($j == 1 ) {
+           next if ($wasB==0);
+           $class='B';
+         } else {
+           next if ($wasC==0);
+           $class='C';        
+         }  
+       }
+       my $filename = $program.'.'.$lang.'.'.$class.'.htm';
+       open(my $fh, '>', $filename) or die "Can`t write '$filename' $!";
+       print $fh "<table>\n";
+       print $fh "<tr><td></td>\n";
+       for (my $l = 1; $l <= $maxthreads2; $l++) {
+            print $fh "<td>$l</td>" if ($times[$i][$j][0][$l]==1);
+       }
+       print $fh "</tr>\n";
+       for (my $k = 1; $k <= $maxthreads1; $k++) {
+          next if ($times[$i][$j][$k][0]==0);
+          print $fh "<tr><td>$k</td>\n";
+          for (my $l = 1; $l <= $maxthreads2; $l++) {
+             if ($times[$i][$j][0][$l]==1) {
+                print $fh "<td>";
+                print $fh $times[$i][$j][$k][$l];
+                print $fh "</td>\n";
+             }
+          }
+          print $fh "</tr>\n";
+       } 
+       print $fh "</table>\n";
+       close $fh;
+     }
+   }
+}
