@@ -1,0 +1,62 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-MZ-OMP) - BT-MZ OpenMP Benchmark
+
+ Number of zones:    2 x    2
+ Iterations:   60 dt:    0.010000
+
+ Use the default load factors with threads
+ Number of outer-level threads:      2
+ Total number of threads:       4 (   2.0 inner-threads/outer-thread)
+
+ Calculated speedup =       3.56
+
+ Time step     1
+ Time step    20
+ Time step    40
+ Time step    60
+ Verification being performed for CLASS  S
+ accuracy setting for epsilon =   1.0000000000000E-08
+ Comparison of RMS-norms of residual
+            1  1.0476873958298E+03  1.0476873958300E+03  1.7513864995705E-13
+            2  9.4199113147919E+01  9.4199113147920E+01  1.5085975058902E-14
+            3  2.1247374030682E+02  2.1247374030680E+02  9.0024350392865E-14
+            4  1.4221735917936E+02  1.4221735917940E+02  3.0916327474040E-13
+            5  1.1354415723750E+03  1.1354415723750E+03  3.1038954844663E-14
+ Comparison of RMS-norms of solution error
+            1  1.7754160629817E+02  1.7754160629820E+02  1.9210173900984E-13
+            2  1.8755402508347E+01  1.8755402508350E+01  1.5589552697422E-13
+            3  3.8633348445056E+01  3.8633348445060E+01  1.1071955813923E-13
+            4  2.6347138903621E+01  2.6347138903620E+01  3.9913375519513E-14
+            5  1.9655662696755E+02  1.9655662696750E+02  2.3367048543790E-13
+ Verification Successful
+
+
+ BT-MZ Benchmark Completed
+ Class           =                        S
+ Size            =               24x  24x   6
+ Iterations      =                       60
+ Time in seconds =                     0.10
+ Real time (nanos) =              43145470.03
+ Total o_threads =                        2
+ Total threads   =                        4
+ Mop/s total     =                  8849.91
+ Operation type  =           floating point
+ Verification    =               SUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              26 Apr 2025
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = 
+    C_INC        = -I../common
+    CFLAGS       = -O3 -fopenmp -mcmodel=medium
+    CLINKFLAGS   = -O3 -fopenmp -mcmodel=medium
+
+
+ Please send all errors/feedbacks to:
+
+ NPB Development Team
+ npb@nas.nasa.gov
+

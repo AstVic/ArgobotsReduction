@@ -1,0 +1,69 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-MZ-OMP) - BT-MZ OpenMP Benchmark
+
+ Number of zones:   16 x   16
+ Iterations:  200 dt:    0.000100
+
+ Use the default load factors with threads
+ Number of outer-level threads:      8
+ Total number of threads:      56 (   7.0 inner-threads/outer-thread)
+
+ Calculated speedup =      55.97
+
+ Time step     1
+ Time step    20
+ Time step    40
+ Time step    60
+ Time step    80
+ Time step   100
+ Time step   120
+ Time step   140
+ Time step   160
+ Time step   180
+ Time step   200
+ Verification being performed for CLASS  C
+ accuracy setting for epsilon =   1.0000000000000E-08
+ Comparison of RMS-norms of residual
+            1  3.4577032878056E+06  3.4577032878060E+06  1.0908560143071E-13
+            2  3.2136213759286E+05  3.2136213759290E+05  1.3168000997584E-13
+            3  7.0025796568699E+05  7.0025796568700E+05  1.5128416676928E-14
+            4  4.5174596274711E+05  4.5174596274710E+05  2.2806525860313E-14
+            5  2.8187158707910E+06  2.8187158707910E+06  1.6520334388193E-15
+ Comparison of RMS-norms of solution error
+            1  2.0591069935703E+05  2.0591069935700E+05  1.5420412405693E-13
+            2  1.6807611294606E+04  1.6807611294610E+04  2.1276867394702E-13
+            3  4.0807316407951E+04  4.0807316407950E+04  3.0667655209881E-14
+            4  2.8365410767777E+04  2.8365410767780E+04  1.0362927229205E-13
+            5  2.1368076107705E+05  2.1368076107710E+05  2.3372330205121E-13
+ Verification Successful
+
+
+ BT-MZ Benchmark Completed
+ Class           =                        C
+ Size            =              480x 320x  28
+ Iterations      =                      200
+ Time in seconds =                  1191.29
+ Real time (nanos) =             52397060535.96
+ Total o_threads =                        8
+ Total threads   =                       56
+ Mop/s total     =                 46319.05
+ Operation type  =           floating point
+ Verification    =               SUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              26 Apr 2025
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = 
+    C_INC        = -I../common
+    CFLAGS       = -O3 -fopenmp -mcmodel=medium
+    CLINKFLAGS   = -O3 -fopenmp -mcmodel=medium
+
+
+ Please send all errors/feedbacks to:
+
+ NPB Development Team
+ npb@nas.nasa.gov
+
