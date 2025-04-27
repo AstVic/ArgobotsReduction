@@ -1,0 +1,32 @@
+Pure C NBP BT-MZ Benchmark Results
+=========================
+
+Configuration: Class=S, Xstreams=1, Threads=1
+Mean Time: .11000000000000000000 seconds
+Mean Time Nanos: 111222333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=1, Threads=1
+Mean Time: 3.99666666666666666666 seconds
+Mean Time Nanos: 3997739666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=1, Threads=1
+Mean Time: 40.52000000000000000000 seconds
+Mean Time Nanos: 40520010666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=1, Threads=1
+Mean Time: 165.46333333333333333333 seconds
+Mean Time Nanos: 165476012000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=1, Threads=1
+Mean Time: 660.17666666666666666666 seconds
+Mean Time Nanos: 660281125333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
