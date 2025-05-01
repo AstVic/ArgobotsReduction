@@ -1,0 +1,4 @@
+OpenMP NBP BT-MZ Benchmark Results
+=========================
+
+Configuration: Class=C, Xstreams=1, Threads=1
