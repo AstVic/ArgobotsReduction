@@ -1,0 +1,272 @@
+OpenMP NBP BT-MZ Benchmark Results
+=========================
+
+Configuration: Class=S, Xstreams=1, Threads=1
+Mean Time: 1.20333333333333333333 seconds
+Mean Time Nanos: 153737666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=2, Threads=2
+Mean Time: .47000000000000000000 seconds
+Mean Time Nanos: 59624666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=3, Threads=3
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=4, Threads=4
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=5, Threads=5
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=6, Threads=6
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=7, Threads=7
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=8, Threads=8
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=S, Xstreams=16, Threads=16
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=1, Threads=1
+Mean Time: 44.75666666666666666666 seconds
+Mean Time Nanos: 5646753000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=2, Threads=2
+Mean Time: 14.99333333333333333333 seconds
+Mean Time Nanos: 2509987666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=3, Threads=3
+Mean Time: 8.97333333333333333333 seconds
+Mean Time Nanos: 3417470000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=4, Threads=4
+Mean Time: 8.35000000000000000000 seconds
+Mean Time Nanos: 2104149000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=5, Threads=5
+Mean Time: 8.26333333333333333333 seconds
+Mean Time Nanos: 1385473000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=6, Threads=6
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=7, Threads=7
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=8, Threads=8
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=W, Xstreams=16, Threads=16
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=1, Threads=1
+Mean Time: 459.45000000000000000000 seconds
+Mean Time Nanos: 57791101333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=2, Threads=2
+Mean Time: 145.05333333333333333333 seconds
+Mean Time Nanos: 24329259333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=3, Threads=3
+Mean Time: 83.44000000000000000000 seconds
+Mean Time Nanos: 31557760666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=4, Threads=4
+Mean Time: 79.42000000000000000000 seconds
+Mean Time Nanos: 19978101666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=5, Threads=5
+Mean Time: 78.18333333333333333333 seconds
+Mean Time Nanos: 22975018000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=6, Threads=6
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=7, Threads=7
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=8, Threads=8
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=A, Xstreams=16, Threads=16
+Mean Time:  seconds
+Mean Time Nanos:  nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=1, Threads=1
+Mean Time: 1884.84000000000000000000 seconds
+Mean Time Nanos: 237335136000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=2, Threads=2
+Mean Time: 599.96333333333333333333 seconds
+Mean Time Nanos: 151167699666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=3, Threads=3
+Mean Time: 338.08666666666666666666 seconds
+Mean Time Nanos: 85331557666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=4, Threads=4
+Mean Time: 315.35000000000000000000 seconds
+Mean Time Nanos: 105879433333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=5, Threads=5
+Mean Time: 312.44000000000000000000 seconds
+Mean Time Nanos: 78693703000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=6, Threads=6
+Mean Time: 310.80333333333333333333 seconds
+Mean Time Nanos: 130926572000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=7, Threads=7
+Mean Time: 311.62333333333333333333 seconds
+Mean Time Nanos: 39260027000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=8, Threads=8
+Mean Time: 309.28666666666666666666 seconds
+Mean Time Nanos: 77949436666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=B, Xstreams=16, Threads=16
+Mean Time: 312.47000000000000000000 seconds
+Mean Time Nanos: 78723338666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=1, Threads=1
+Mean Time: 7573.45666666666666666666 seconds
+Mean Time Nanos: 952889498333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=2, Threads=2
+Mean Time: 2401.57333333333333333333 seconds
+Mean Time Nanos: 504108959666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=3, Threads=3
+Mean Time: 1336.52000000000000000000 seconds
+Mean Time Nanos: 168291985666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=4, Threads=4
+Mean Time: 1255.47000000000000000000 seconds
+Mean Time Nanos: 421714931333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=5, Threads=5
+Mean Time: 1247.45000000000000000000 seconds
+Mean Time Nanos: 262208397000.00000000000000000000 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=6, Threads=6
+Mean Time: 1251.22000000000000000000 seconds
+Mean Time Nanos: 578353714666.66666666666666666666 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=7, Threads=7
+Mean Time: 1248.18000000000000000000 seconds
+Mean Time Nanos: 575595195333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=8, Threads=8
+Mean Time: 1241.59333333333333333333 seconds
+Mean Time Nanos: 625509115333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
+
+Configuration: Class=C, Xstreams=16, Threads=16
+Mean Time: 1255.12000000000000000000 seconds
+Mean Time Nanos: 1319009878333.33333333333333333333 nanoseconds
+Verification: SUCCESSFUL
+------------------------
