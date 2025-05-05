@@ -36,11 +36,11 @@
  Class           =                        S
  Size            =               24x  24x   6
  Iterations      =                       60
- Time in seconds =                     4.52
- Real time (nanos) =             346986055.37
+ Time in seconds =                     3.71
+ Real time (nanos) =             132851839.07
  Total o_threads =                        1
  Total threads   =                        1
- Mop/s total     =                  1100.43
+ Mop/s total     =                  2874.13
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1

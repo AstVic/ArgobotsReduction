@@ -1,4 +1,0 @@
-
-Test Summary Report
-===================
-Unsuccessful tests: 0

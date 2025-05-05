@@ -43,8 +43,8 @@
  Class           =                        W
  Size            =               64x  64x   8
  Iterations      =                      200
- Time in seconds =                    46.59
- Real time (nanos) =             1746096632362813952.00
+ Time in seconds =                    45.55
+ Real time (nanos) =             1746384993401890048.00
  Total o_threads =                        2
  Total threads   =                        4
  Mop/s total     =                     0.00

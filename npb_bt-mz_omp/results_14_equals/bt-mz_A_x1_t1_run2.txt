@@ -43,11 +43,11 @@
  Class           =                        A
  Size            =              128x 128x  16
  Iterations      =                      200
- Time in seconds =                    31.46
- Real time (nanos) =             31461000780.98
+ Time in seconds =                    31.90
+ Real time (nanos) =             31898179074.05
  Total o_threads =                        1
  Total threads   =                        1
- Mop/s total     =                  4647.38
+ Mop/s total     =                  4583.68
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1

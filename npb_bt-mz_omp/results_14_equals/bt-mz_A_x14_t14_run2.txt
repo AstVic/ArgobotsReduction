@@ -25,7 +25,7 @@
  Verification being performed for CLASS  A
  accuracy setting for epsilon =   1.0000000000000E-08
  Comparison of RMS-norms of residual
-            1  5.5367038895217E+04  5.5367038895220E+04  5.9398748916927E-14
+            1  5.5367038895217E+04  5.5367038895220E+04  5.9661575239568E-14
             2  5.0778350384047E+03  5.0778350384050E+03  6.1793199215511E-14
             3  1.0673913610665E+04  1.0673913610670E+04  4.4904214641123E-13
             4  6.4411796949723E+03  6.4411796949720E+03  5.3938407641144E-14
@@ -43,11 +43,11 @@
  Class           =                        A
  Size            =              128x 128x  16
  Iterations      =                      200
- Time in seconds =                    98.52
- Real time (nanos) =             10460953704.02
+ Time in seconds =                    97.95
+ Real time (nanos) =             10350570643.09
  Total o_threads =                       14
  Total threads   =                      196
- Mop/s total     =                 13976.85
+ Mop/s total     =                 14125.91
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1

@@ -27,7 +27,7 @@
  Comparison of RMS-norms of residual
             1  5.5367038895217E+04  5.5367038895220E+04  5.9267335755606E-14
             2  5.0778350384047E+03  5.0778350384050E+03  6.1972309937874E-14
-            3  1.0673913610665E+04  1.0673913610670E+04  4.4887173193442E-13
+            3  1.0673913610665E+04  1.0673913610670E+04  4.4904214641123E-13
             4  6.4411796949723E+03  6.4411796949720E+03  5.3797207621141E-14
             5  4.3719263240686E+04  4.3719263240690E+04  9.2698460374059E-14
  Comparison of RMS-norms of solution error
@@ -43,11 +43,11 @@
  Class           =                        A
  Size            =              128x 128x  16
  Iterations      =                      200
- Time in seconds =                    75.67
- Real time (nanos) =             11098154000.00
+ Time in seconds =                    74.74
+ Real time (nanos) =             21681464000.00
  Total o_threads =                        3
  Total threads   =                        9
- Mop/s total     =                 13174.37
+ Mop/s total     =                  6743.60
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1

@@ -25,7 +25,7 @@
             5  1.1354415723750E+03  1.1354415723750E+03  3.1038954844663E-14
  Comparison of RMS-norms of solution error
             1  1.7754160629817E+02  1.7754160629820E+02  1.9210173900984E-13
-            2  1.8755402508347E+01  1.8755402508350E+01  1.5570610349065E-13
+            2  1.8755402508347E+01  1.8755402508350E+01  1.5589552697422E-13
             3  3.8633348445056E+01  3.8633348445060E+01  1.1053563860743E-13
             4  2.6347138903621E+01  2.6347138903620E+01  3.9913375519513E-14
             5  1.9655662696755E+02  1.9655662696750E+02  2.3352588736523E-13
@@ -36,11 +36,11 @@
  Class           =                        S
  Size            =               24x  24x   6
  Iterations      =                       60
- Time in seconds =                     0.97
- Real time (nanos) =             138350169.00
+ Time in seconds =                     0.91
+ Real time (nanos) =             132189102.01
  Total o_threads =                        4
  Total threads   =                       16
- Mop/s total     =                  2759.91
+ Mop/s total     =                  2888.54
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1

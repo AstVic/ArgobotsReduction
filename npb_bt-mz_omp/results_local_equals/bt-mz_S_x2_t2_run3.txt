@@ -5,7 +5,7 @@
  Number of zones:    2 x    2
  Iterations:   60 dt:    0.010000
 
- Use the default load factors with threads
+MAX THREADS=2 Use the default load factors with threads
  Number of outer-level threads:      2
  Total number of threads:       4 (   2.0 inner-threads/outer-thread)
 
@@ -36,15 +36,14 @@
  Class           =                        S
  Size            =               24x  24x   6
  Iterations      =                       60
- Time in seconds =                     0.10
- Real time (nanos) =              43961000.00
+ Time in seconds =                     0.09
  Total o_threads =                        2
  Total threads   =                        4
- Mop/s total     =                  8685.73
+ Mop/s total     =                     0.10
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1
- Compile date    =              26 Apr 2025
+ Compile date    =              03 May 2025
 
  Compile options:
     CC           = gcc

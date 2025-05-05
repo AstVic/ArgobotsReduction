@@ -37,10 +37,10 @@
  Size            =               24x  24x   6
  Iterations      =                       60
  Time in seconds =                     0.09
- Real time (nanos) =              85963662.02
+ Real time (nanos) =              88663987.00
  Total o_threads =                        1
  Total threads   =                        1
- Mop/s total     =                  4441.80
+ Mop/s total     =                  4306.52
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1

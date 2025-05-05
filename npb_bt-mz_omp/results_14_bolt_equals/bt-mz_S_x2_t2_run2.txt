@@ -36,8 +36,8 @@
  Class           =                        S
  Size            =               24x  24x   6
  Iterations      =                       60
- Time in seconds =                     2.81
- Real time (nanos) =             1746094812099131136.00
+ Time in seconds =                     1.40
+ Real time (nanos) =             1746382723605966080.00
  Total o_threads =                        2
  Total threads   =                        4
  Mop/s total     =                     0.00

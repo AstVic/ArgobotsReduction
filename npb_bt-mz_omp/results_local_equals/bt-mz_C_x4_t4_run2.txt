@@ -33,9 +33,9 @@
  Comparison of RMS-norms of solution error
             1  2.0591069935703E+05  2.0591069935700E+05  1.5434546605882E-13
             2  1.6807611294606E+04  1.6807611294610E+04  2.1320157053694E-13
-            3  4.0807316407951E+04  4.0807316407950E+04  3.1024255851857E-14
-            4  2.8365410767777E+04  2.8365410767780E+04  1.0324451014245E-13
-            5  2.1368076107705E+05  2.1368076107710E+05  2.3290608770837E-13
+            3  4.0807316407951E+04  4.0807316407950E+04  3.1202556172845E-14
+            4  2.8365410767777E+04  2.8365410767780E+04  1.0337276419232E-13
+            5  2.1368076107705E+05  2.1368076107710E+05  2.3331469487979E-13
  Verification Successful
 
 
@@ -43,11 +43,11 @@
  Class           =                        C
  Size            =              480x 320x  28
  Iterations      =                      200
- Time in seconds =                  1269.77
- Real time (nanos) =             668328979000.00
+ Time in seconds =                  1243.26
+ Real time (nanos) =             326009443000.00
  Total o_threads =                        4
  Total threads   =                       16
- Mop/s total     =                  3631.42
+ Mop/s total     =                  7444.51
  Operation type  =           floating point
  Verification    =               SUCCESSFUL
  Version         =                    3.3.1

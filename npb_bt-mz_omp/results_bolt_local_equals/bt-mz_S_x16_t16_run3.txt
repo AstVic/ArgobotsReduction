@@ -1,9 +1,0 @@
-
-
- NAS Parallel Benchmarks (NPB3.3-MZ-OMP) - BT-MZ OpenMP Benchmark
-
- Number of zones:    2 x    2
- Iterations:   60 dt:    0.010000
-
- Error: num_othreads     16 exceeded max_allowed      4
- Please redefine the value for OMP_NUM_THREADS
