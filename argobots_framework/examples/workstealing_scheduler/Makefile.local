@@ -1,0 +1,35 @@
+# -*- Mode: Makefile; -*-
+# Makefile for building old and cost-aware workstealing schedulers
+
+ABT_INC = /home/victoria/argobots-install/include
+ABT_LIB = /home/victoria/argobots-install/lib
+
+CFLAGS = -O2 -Wall -Wextra -I$(ABT_INC)
+LDFLAGS = -L$(ABT_LIB) -labt -lpthread
+
+# Executables
+PROGRAMS = workstealing_scheduler workstealing_scheduler_cost_aware workstealing_scheduler_compare
+
+# Sources
+workstealing_scheduler_SOURCES = workstealing_scheduler.c abt_workstealing_scheduler.c
+workstealing_scheduler_cost_aware_SOURCES = workstealing_scheduler.c abt_workstealing_scheduler_cost_aware.c
+workstealing_scheduler_compare_SOURCES = workstealing_scheduler_compare.c abt_workstealing_scheduler.c abt_workstealing_scheduler_cost_aware.c
+
+# Default target
+all: $(PROGRAMS)
+
+# Build old scheduler
+workstealing_scheduler: $(workstealing_scheduler_SOURCES)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+# Build cost-aware scheduler
+workstealing_scheduler_cost_aware: $(workstealing_scheduler_cost_aware_SOURCES)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+# Build comparison test
+workstealing_scheduler_compare: $(workstealing_scheduler_compare_SOURCES)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+# Clean
+clean:
+	rm -f $(PROGRAMS) *.o

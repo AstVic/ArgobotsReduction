@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\Users\\Elena\\Desktop\\MSU\\3 курс\\Научка\\argobots\\src\\include"
+                "C:\\Users\\Elena\\Desktop\\MSU\\3year\\course_work\\argobots\\src\\include"
             ],
             "defines": [
                 "_DEBUG",
