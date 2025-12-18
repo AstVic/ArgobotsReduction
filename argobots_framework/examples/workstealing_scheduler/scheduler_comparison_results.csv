@@ -1,0 +1,6 @@
+TestID,Streams,TasksPerStream,ComplexityMode,OldTimeMs,NewTimeMs,OldSteals,NewSteals,OldImbalance,NewImbalance,OldEfficiency,NewEfficiency,Improvement%
+1,2,10,0,217.35,218.04,0,0,0,0,1.000,1.000,-0.32
+2,4,25,1,1905.02,1898.31,0,0,0,0,1.000,1.000,0.35
+3,8,50,2,7814.03,7824.66,0,0,0,0,1.000,1.000,-0.14
+4,4,30,3,4632.67,4629.83,0,0,0,0,1.000,1.000,0.06
+5,4,40,4,7808.06,7814.53,0,0,0,0,1.000,1.000,-0.08
