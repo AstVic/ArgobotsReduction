@@ -9,411 +9,260 @@
 #define COMPLEXITY_MODE 3
 
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
-#include <sys/time.h>
-#include <math.h>
 #include <unistd.h>
+#include <sys/time.h>
 #include <limits.h>
+#include <abt.h>
 
-// Флаги для выбора планировщика
-#define SCHEDULER_OLD 0
-#define SCHEDULER_NEW 1
-
-// Заголовочные файлы
 #include "abt_workstealing_scheduler.h"
 #include "abt_workstealing_scheduler_cost_aware.h"
 
-// Структура для задачи
+/* ============================================================
+ * Конфигурация
+ * ============================================================ */
+
+#define SCHEDULER_OLD 0
+#define SCHEDULER_NEW 1
+
+/* ============================================================
+ * Структуры
+ * ============================================================ */
+
 typedef struct {
     int id;
-    int complexity;  // Сложность задачи (1-легкая, 2-средняя, 3-тяжелая)
-    int execution_time_ms;  // Время выполнения в миллисекундах
-    int created_on_stream;  // На каком потоке создана
-    int executed_on_stream; // На каком потоке выполнена
-    int stolen;  // Была ли украдена
-} benchmark_task_t;
+    int complexity;
+    int exec_time_ms;
+    int created_on;
+    int executed_on;
+} task_t;
 
-// Глобальные параметры теста
 typedef struct {
-    int num_xstreams;      // Количество исполнительных потоков
-    int tasks_per_stream;  // Количество задач на поток
-    int complexity_mode;   // Режим сложности задач
-    int steal_attempts;    // Попытки кражи
+    int num_xstreams;
+    int tasks_per_stream;
+    int complexity_mode;
 } test_config_t;
 
-// Глобальная статистика выполнения
 typedef struct {
     double total_time_ms;
-    int tasks_completed;
-    int steals_occurred;
-    int work_imbalance;    // Максимальная разница в количестве задач между потоками
-    double efficiency;     // Эффективность использования потоков (0-1)
+    int steals;
+    int imbalance;
+    double efficiency;
 } benchmark_stats_t;
 
-// Переменные для хранения задач между запусками
-static benchmark_task_t **g_tasks = NULL;
-static int g_num_tasks = 0;
+/* ============================================================
+ * Глобальные данные
+ * ============================================================ */
 
-// ===================== УТИЛИТЫ =====================
+static task_t **g_tasks = NULL;
+static int g_task_count = 0;
+static ABT_mutex g_task_mutex;
 
-double get_current_time_ms() {
+/* ============================================================
+ * Утилиты
+ * ============================================================ */
+
+static double now_ms(void) {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    return (double)(tv.tv_sec * 1000 + tv.tv_usec / 1000.0);
+    return tv.tv_sec * 1000.0 + tv.tv_usec / 1000.0;
 }
 
-// Функция для создания набора задач с заданной сложностью
-benchmark_task_t** create_tasks(int num_xstreams, int tasks_per_stream, int complexity_mode) {
-    int total_tasks = num_xstreams * tasks_per_stream;
-    benchmark_task_t **tasks = malloc(total_tasks * sizeof(benchmark_task_t*));
-    
-    srand(12345); // Фиксированный seed для воспроизводимости
-    
-    for (int stream = 0; stream < num_xstreams; stream++) {
-        for (int i = 0; i < tasks_per_stream; i++) {
-            int idx = stream * tasks_per_stream + i;
-            tasks[idx] = malloc(sizeof(benchmark_task_t));
-            tasks[idx]->id = idx;
-            tasks[idx]->created_on_stream = stream;
-            tasks[idx]->executed_on_stream = -1;
-            tasks[idx]->stolen = 0;
-            
-            // Определяем сложность в зависимости от режима
-            switch (complexity_mode) {
-                case 0: // Все легкие
-                    tasks[idx]->complexity = 1;
-                    tasks[idx]->execution_time_ms = 10 + rand() % 20;
+static void execute_task(int ms) {
+    usleep(ms * 1000);
+}
+
+/* ============================================================
+ * Тело задачи (ULT)
+ * ============================================================ */
+
+static void task_body(void *arg) {
+    task_t *task = (task_t *)arg;
+    int rank;
+
+    ABT_xstream_self_rank(&rank);
+
+    execute_task(task->exec_time_ms);
+
+    ABT_mutex_lock(g_task_mutex);
+    task->executed_on = rank;
+    ABT_mutex_unlock(g_task_mutex);
+}
+
+/* ============================================================
+ * Создание задач
+ * ============================================================ */
+
+static void create_tasks(const test_config_t *cfg) {
+    g_task_count = cfg->num_xstreams * cfg->tasks_per_stream;
+    g_tasks = malloc(sizeof(task_t *) * g_task_count);
+
+    srand(42);
+
+    for (int s = 0; s < cfg->num_xstreams; s++) {
+        for (int i = 0; i < cfg->tasks_per_stream; i++) {
+            int id = s * cfg->tasks_per_stream + i;
+            task_t *t = malloc(sizeof(task_t));
+
+            t->id = id;
+            t->created_on = s;
+            t->executed_on = -1;
+
+            switch (cfg->complexity_mode) {
+                case 0:
+                    t->complexity = 1;
+                    t->exec_time_ms = 10 + rand() % 10;
                     break;
-                case 1: // Все средние
-                    tasks[idx]->complexity = 2;
-                    tasks[idx]->execution_time_ms = 50 + rand() % 50;
+                case 1:
+                    t->complexity = 2;
+                    t->exec_time_ms = 40 + rand() % 20;
                     break;
-                case 2: // Все тяжелые
-                    tasks[idx]->complexity = 3;
-                    tasks[idx]->execution_time_ms = 100 + rand() % 100;
+                case 2:
+                    t->complexity = 3;
+                    t->exec_time_ms = 80 + rand() % 40;
                     break;
-                case 3: // Смешанные (разные очереди)
-                    if (stream % 3 == 0) {
-                        tasks[idx]->complexity = 1;
-                        tasks[idx]->execution_time_ms = 10 + rand() % 20;
-                    } else if (stream % 3 == 1) {
-                        tasks[idx]->complexity = 2;
-                        tasks[idx]->execution_time_ms = 50 + rand() % 50;
-                    } else {
-                        tasks[idx]->complexity = 3;
-                        tasks[idx]->execution_time_ms = 100 + rand() % 100;
-                    }
+                case 3:
+                    t->complexity = (s % 3) + 1;
+                    t->exec_time_ms = 20 * t->complexity + rand() % 20;
                     break;
-                case 4: // Сильно неравномерные
-                    if (stream == 0) {
-                        // Первый поток получает много тяжелых задач
-                        tasks[idx]->complexity = 3;
-                        tasks[idx]->execution_time_ms = 150 + rand() % 100;
-                    } else {
-                        tasks[idx]->complexity = 1;
-                        tasks[idx]->execution_time_ms = 5 + rand() % 15;
-                    }
-                    break;
+                default:
+                    t->complexity = 1;
+                    t->exec_time_ms = 10;
             }
+
+            g_tasks[id] = t;
         }
     }
-    
-    g_tasks = tasks;
-    g_num_tasks = total_tasks;
-    
-    return tasks;
 }
 
-// Функция для выполнения задачи
-void execute_task(benchmark_task_t *task) {
-    // Имитация работы задачи
-    usleep(task->execution_time_ms * 1000); // microsleep
-}
+/* ============================================================
+ * Benchmark
+ * ============================================================ */
 
-// ===================== КОД ДЛЯ ТЕСТОВЫХ ЗАДАЧ =====================
-
-#define MAX_TASKS_PER_STREAM 1000
-
-// Структура для передачи данных в тестовую функцию
-typedef struct {
-    int stream_id;
-    benchmark_task_t **tasks;
-    int num_tasks;
-    int *steal_counter;
-} worker_data_t;
-
-// Функция, которая будет выполняться как задача
-static void benchmark_task_function(void *arg) {
-    worker_data_t *data = (worker_data_t *)arg;
-    
-    // Выполняем все задачи, назначенные этому потоку
-    for (int i = 0; i < data->num_tasks; i++) {
-        if (data->tasks[i] && data->tasks[i]->created_on_stream == data->stream_id) {
-            execute_task(data->tasks[i]);
-            data->tasks[i]->executed_on_stream = data->stream_id;
-            
-            // Проверяем, была ли задача украдена
-            if (data->tasks[i]->executed_on_stream != data->tasks[i]->created_on_stream) {
-                data->tasks[i]->stolen = 1;
-                (*data->steal_counter)++;
-            }
-        }
-    }
-    
-    free(data);
-}
-
-// Функция для создания потоков с задачами
-static void create_benchmark_tasks(void *arg) {
-    int stream_id = (int)(size_t)arg;
-    ABT_xstream xstream;
-    ABT_pool pool;
-    ABT_thread thread;
-    
-    ABT_xstream_self(&xstream);
-    ABT_xstream_get_main_pools(xstream, 1, &pool);
-    
-    // Создаем данные для рабочей функции
-    worker_data_t *data = malloc(sizeof(worker_data_t));
-    data->stream_id = stream_id;
-    data->tasks = g_tasks;
-    data->num_tasks = g_num_tasks;
-    data->steal_counter = malloc(sizeof(int));
-    *data->steal_counter = 0;
-    
-    // Создаем одну задачу, которая выполнит все подзадачи
-    ABT_thread_create(pool, benchmark_task_function, data, ABT_THREAD_ATTR_NULL, &thread);
-    
-    // Ждем завершения
-    ABT_thread_join(thread);
-    ABT_thread_free(&thread);
-    
-    // Сохраняем счетчик краж
-    // (здесь нужно глобально сохранить данные, но для простоты используем static)
-    static int total_steals = 0;
-    total_steals += *data->steal_counter;
-    free(data->steal_counter);
-}
-
-// ===================== ОСНОВНОЙ БЕНЧМАРК =====================
-
-benchmark_stats_t run_benchmark(int scheduler_type, test_config_t config) {
+static benchmark_stats_t run_benchmark(int scheduler, test_config_t cfg) {
     benchmark_stats_t stats = {0};
-    double start_time, end_time;
-    
-    // Сохраняем текущие задачи
-    benchmark_task_t **tasks = create_tasks(config.num_xstreams, config.tasks_per_stream, config.complexity_mode);
-    
-    // Инициализируем Argobots
+
     ABT_init(0, NULL);
-    
-    ABT_xstream xstreams[config.num_xstreams];
-    ABT_sched scheds[config.num_xstreams];
-    ABT_pool pools[config.num_xstreams];
-    ABT_thread threads[config.num_xstreams];
-    
-    // Создаем пулы
-    for (int i = 0; i < config.num_xstreams; i++) {
-        ABT_pool_create_basic(ABT_POOL_FIFO, ABT_POOL_ACCESS_MPMC, ABT_TRUE, &pools[i]);
+    ABT_mutex_create(&g_task_mutex);
+
+    ABT_xstream *xstreams = malloc(sizeof(ABT_xstream) * cfg.num_xstreams);
+    ABT_sched   *scheds   = malloc(sizeof(ABT_sched)   * cfg.num_xstreams);
+    ABT_pool    *pools    = malloc(sizeof(ABT_pool)    * cfg.num_xstreams);
+    ABT_thread  *threads  = malloc(sizeof(ABT_thread)  * g_task_count);
+
+    for (int i = 0; i < cfg.num_xstreams; i++) {
+        ABT_pool_create_basic(ABT_POOL_FIFO, ABT_POOL_ACCESS_MPMC,
+                              ABT_TRUE, &pools[i]);
     }
-    
-    // Создаем планировщики в зависимости от типа
-    if (scheduler_type == SCHEDULER_OLD) {
-        ABT_create_ws_scheds(config.num_xstreams, pools, scheds);
-    } else {
-        ABT_create_ws_scheds_cost_aware(config.num_xstreams, pools, scheds);
-    }
-    
-    // Создаем исполнительные потоки
+
+    if (scheduler == SCHEDULER_OLD)
+        ABT_create_ws_scheds(cfg.num_xstreams, pools, scheds);
+    else
+        ABT_create_ws_scheds_cost_aware(cfg.num_xstreams, pools, scheds);
+
     ABT_xstream_self(&xstreams[0]);
     ABT_xstream_set_main_sched(xstreams[0], scheds[0]);
-    for (int i = 1; i < config.num_xstreams; i++) {
+
+    for (int i = 1; i < cfg.num_xstreams; i++)
         ABT_xstream_create(scheds[i], &xstreams[i]);
+
+    double start = now_ms();
+
+    int t = 0;
+    for (int s = 0; s < cfg.num_xstreams; s++) {
+        for (int i = 0; i < cfg.tasks_per_stream; i++) {
+            ABT_thread_create(
+                pools[s],
+                task_body,
+                g_tasks[t],
+                ABT_THREAD_ATTR_NULL,
+                &threads[t]
+            );
+            t++;
+        }
     }
-    
-    // Замеряем время
-    start_time = get_current_time_ms();
-    
-    // Создаем тестовые потоки
-    for (int i = 0; i < config.num_xstreams; i++) {
-        size_t stream_id = (size_t)i;
-        ABT_thread_create(pools[i], create_benchmark_tasks, (void *)stream_id, 
-                         ABT_THREAD_ATTR_NULL, &threads[i]);
-    }
-    
-    // Ждем завершения
-    for (int i = 0; i < config.num_xstreams; i++) {
+
+    for (int i = 0; i < g_task_count; i++) {
         ABT_thread_join(threads[i]);
         ABT_thread_free(&threads[i]);
     }
-    
-    end_time = get_current_time_ms();
-    
-    // Очистка
-    for (int i = 1; i < config.num_xstreams; i++) {
+
+    double end = now_ms();
+    stats.total_time_ms = end - start;
+
+    int *per_stream = calloc(cfg.num_xstreams, sizeof(int));
+    int steals = 0;
+
+    for (int i = 0; i < g_task_count; i++) {
+        if (g_tasks[i]->executed_on != g_tasks[i]->created_on)
+            steals++;
+        per_stream[g_tasks[i]->executed_on]++;
+    }
+
+    int min = INT_MAX, max = 0;
+    for (int i = 0; i < cfg.num_xstreams; i++) {
+        if (per_stream[i] < min) min = per_stream[i];
+        if (per_stream[i] > max) max = per_stream[i];
+    }
+
+    stats.steals = steals;
+    stats.imbalance = max - min;
+    stats.efficiency = (double)min / max;
+
+    for (int i = 1; i < cfg.num_xstreams; i++) {
         ABT_xstream_join(xstreams[i]);
         ABT_xstream_free(&xstreams[i]);
     }
-    
-    for (int i = 1; i < config.num_xstreams; i++) {
-        ABT_sched_free(&scheds[i]);
-    }
-    
+
     ABT_finalize();
-    
-    // Собираем статистику
-    stats.total_time_ms = end_time - start_time;
-    stats.tasks_completed = config.num_xstreams * config.tasks_per_stream;
-    
-    // Подсчитываем кражи (нужно реализовать подсчет в функциях)
-    int steals = 0;
-    for (int i = 0; i < g_num_tasks; i++) {
-        if (tasks[i]->stolen) {
-            steals++;
-        }
-    }
-    stats.steals_occurred = steals;
-    
-    // Вычисляем дисбаланс
-    int tasks_per_stream[config.num_xstreams];
-    memset(tasks_per_stream, 0, sizeof(int) * config.num_xstreams);
-    
-    for (int i = 0; i < g_num_tasks; i++) {
-        if (tasks[i]->executed_on_stream >= 0) {
-            tasks_per_stream[tasks[i]->executed_on_stream]++;
-        }
-    }
-    
-    int max_tasks = 0, min_tasks = INT_MAX;
-    for (int i = 0; i < config.num_xstreams; i++) {
-        if (tasks_per_stream[i] > max_tasks) max_tasks = tasks_per_stream[i];
-        if (tasks_per_stream[i] < min_tasks) min_tasks = tasks_per_stream[i];
-    }
-    
-    stats.work_imbalance = max_tasks - min_tasks;
-    stats.efficiency = (double)min_tasks / max_tasks;
-    
+
+    free(per_stream);
+    free(xstreams);
+    free(scheds);
+    free(pools);
+    free(threads);
+
     return stats;
 }
 
-// ===================== ГЛАВНАЯ ФУНКЦИЯ =====================
+/* ============================================================
+ * main
+ * ============================================================ */
 
-int main(int argc, char *argv[]) {
-    printf("=== СРАВНЕНИЕ ПЛАНИРОВЩИКОВ ЗАДАЧ ===\n\n");
-    
-    // Конфигурации тестов
-    test_config_t test_configs[] = {
-        // num_xstreams, tasks_per_stream, complexity_mode, steal_attempts
-        {2, 10, 0, 5},    // Мало задач, легкие
-        {4, 25, 1, 10},   // Среднее количество, средние задачи
-        {8, 50, 2, 20},   // Много задач, тяжелые
-        {4, 30, 3, 15},   // Смешанные очереди
-        {4, 40, 4, 20},   // Сильно неравномерные
+int main(void) {
+    test_config_t tests[] = {
+        {2, 20, 0},
+        {4, 40, 1},
+        {4, 40, 3},
+        {8, 60, 2},
     };
-    
-    int num_tests = sizeof(test_configs) / sizeof(test_configs[0]);
-    
-    // Создаем CSV файл для результатов
-    FILE *csv = fopen("scheduler_comparison_results.csv", "w");
-    if (!csv) {
-        perror("Ошибка создания файла результатов");
-        return 1;
+
+    int ntests = sizeof(tests) / sizeof(tests[0]);
+
+    for (int i = 0; i < ntests; i++) {
+        printf("\n=== Тест %d ===\n", i + 1);
+
+        create_tasks(&tests[i]);
+        benchmark_stats_t old = run_benchmark(SCHEDULER_OLD, tests[i]);
+
+        create_tasks(&tests[i]);
+        benchmark_stats_t nw  = run_benchmark(SCHEDULER_NEW, tests[i]);
+
+        printf("OLD: %.2f ms, steals=%d, imbalance=%d, eff=%.3f\n",
+               old.total_time_ms, old.steals, old.imbalance, old.efficiency);
+
+        printf("NEW: %.2f ms, steals=%d, imbalance=%d, eff=%.3f\n",
+               nw.total_time_ms, nw.steals, nw.imbalance, nw.efficiency);
+
+        double imp = (old.total_time_ms - nw.total_time_ms)
+                     / old.total_time_ms * 100.0;
+
+        printf("Improvement: %.2f %%\n", imp);
+
+        for (int t = 0; t < g_task_count; t++)
+            free(g_tasks[t]);
+        free(g_tasks);
     }
-    
-    // Заголовок CSV
-    fprintf(csv, "TestID,Streams,TasksPerStream,ComplexityMode,");
-    fprintf(csv, "OldTimeMs,NewTimeMs,OldSteals,NewSteals,");
-    fprintf(csv, "OldImbalance,NewImbalance,OldEfficiency,NewEfficiency,Improvement%%\n");
-    
-    printf("Запуск тестов (сначала старый планировщик, затем новый)...\n\n");
-    
-    for (int test_id = 0; test_id < num_tests; test_id++) {
-        test_config_t config = test_configs[test_id];
-        
-        printf("Тест %d: %d потоков, %d задач/поток, сложность: %d\n",
-               test_id + 1, config.num_xstreams, config.tasks_per_stream, config.complexity_mode);
-        
-        // 1. Запускаем старый планировщик
-        printf("  Запуск старого планировщика...\n");
-        benchmark_stats_t old_stats = run_benchmark(SCHEDULER_OLD, config);
-        
-        // Даем системе отдохнуть между тестами
-        sleep(1);
-        
-        // 2. Запускаем новый планировщик
-        printf("  Запуск нового планировщика...\n");
-        benchmark_stats_t new_stats = run_benchmark(SCHEDULER_NEW, config);
-        
-        // Вычисляем улучшение
-        double improvement = 0;
-        if (old_stats.total_time_ms > 0) {
-            improvement = ((old_stats.total_time_ms - new_stats.total_time_ms) / 
-                          old_stats.total_time_ms) * 100;
-        }
-        
-        // Выводим результаты
-        printf("  Результаты:\n");
-        printf("    Старый: %.2f ms, %d краж, дисбаланс: %d, эффективность: %.3f\n",
-               old_stats.total_time_ms, old_stats.steals_occurred, 
-               old_stats.work_imbalance, old_stats.efficiency);
-        printf("    Новый:  %.2f ms, %d краж, дисбаланс: %d, эффективность: %.3f\n",
-               new_stats.total_time_ms, new_stats.steals_occurred,
-               new_stats.work_imbalance, new_stats.efficiency);
-        printf("    Улучшение: %.2f%%\n\n", improvement);
-        
-        // Записываем в CSV
-        fprintf(csv, "%d,%d,%d,%d,%.2f,%.2f,%d,%d,%d,%d,%.3f,%.3f,%.2f\n",
-                test_id + 1, config.num_xstreams, config.tasks_per_stream, config.complexity_mode,
-                old_stats.total_time_ms, new_stats.total_time_ms,
-                old_stats.steals_occurred, new_stats.steals_occurred,
-                old_stats.work_imbalance, new_stats.work_imbalance,
-                old_stats.efficiency, new_stats.efficiency,
-                improvement);
-        
-        // Очищаем задачи для следующего теста
-        if (g_tasks) {
-            for (int i = 0; i < g_num_tasks; i++) {
-                free(g_tasks[i]);
-            }
-            free(g_tasks);
-            g_tasks = NULL;
-            g_num_tasks = 0;
-        }
-        
-        sleep(2); // Пауза между тестами
-    }
-    
-    fclose(csv);
-    
-    printf("=== ТЕСТЫ ЗАВЕРШЕНЫ ===\n");
-    printf("Результаты сохранены в scheduler_comparison_results.csv\n\n");
-    
-    // Генерируем простой отчет
-    printf("Краткий отчет:\n");
-    printf("--------------\n");
-    
-    FILE *csv_read = fopen("scheduler_comparison_results.csv", "r");
-    if (csv_read) {
-        char line[256];
-        fgets(line, sizeof(line), csv_read); // Пропускаем заголовок
-        
-        double total_improvement = 0;
-        int count = 0;
-        
-        while (fgets(line, sizeof(line), csv_read)) {
-            double improvement;
-            sscanf(line, "%*d,%*d,%*d,%*d,%*f,%*f,%*d,%*d,%*d,%*d,%*f,%*f,%lf", &improvement);
-            total_improvement += improvement;
-            count++;
-        }
-        
-        if (count > 0) {
-            printf("Среднее улучшение производительности: %.2f%%\n", total_improvement / count);
-        }
-        
-        fclose(csv_read);
-    }
-    
+
     return 0;
 }

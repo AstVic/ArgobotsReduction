@@ -58,11 +58,11 @@ $(cat compare_schedulers_real.c | tail -n +2)
 EOF
     
     # Компилируем и запускаем
-    gcc -O2 -Wall -Wextra -I$(HOME)/argobots-install/include \
+    gcc -O2 -Wall -Wextra -I$HOME/argobots-install/include \
         benchmark_test_${i}.c \
         abt_workstealing_scheduler.c \
         abt_workstealing_scheduler_cost_aware.c \
-        -L$(HOME)/argobots-install/lib -labt -lpthread \
+        -L$HOME/argobots-install/lib -labt -lpthread \
         -o benchmark_test_${i}
     
     echo "  Запуск..."
