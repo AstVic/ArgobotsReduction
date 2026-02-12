@@ -12,8 +12,8 @@ PROGRAMS = workstealing_scheduler workstealing_scheduler_cost_aware workstealing
 
 # Sources
 workstealing_scheduler_SOURCES = workstealing_scheduler.c abt_workstealing_scheduler.c
-workstealing_scheduler_cost_aware_SOURCES = workstealing_scheduler.c abt_workstealing_scheduler_cost_aware.c
-workstealing_scheduler_compare_SOURCES = workstealing_scheduler_compare.c abt_workstealing_scheduler.c abt_workstealing_scheduler_cost_aware.c
+workstealing_scheduler_cost_aware_SOURCES = workstealing_scheduler.c abt_workstealing_scheduler.c abt_workstealing_scheduler_cost_aware.c
+workstealing_scheduler_compare_SOURCES = compare_schedulers_real.c abt_workstealing_scheduler.c abt_workstealing_scheduler_cost_aware.c
 
 # Default target
 all: $(PROGRAMS)

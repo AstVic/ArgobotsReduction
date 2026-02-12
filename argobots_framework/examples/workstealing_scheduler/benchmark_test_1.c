@@ -178,6 +178,15 @@ static benchmark_stats_t run_benchmark(int scheduler, test_config_t cfg) {
                 ABT_THREAD_ATTR_NULL,
                 &threads[t]
             );
+            if (scheduler == SCHEDULER_NEW) {
+                /*
+                 * В cost-aware версии обязательно нужно сообщать планировщику
+                 * оценочную стоимость задачи. Без этого суммарная нагрузка
+                 * всех пулов остаётся нулевой и выбор жертвы для кражи
+                 * всегда возвращает "нет жертвы".
+                 */
+                ws_push_task_estimate(s, (double)g_tasks[t]->exec_time_ms);
+            }
             t++;
         }
     }

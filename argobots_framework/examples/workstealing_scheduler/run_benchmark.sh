@@ -75,8 +75,9 @@ done
 echo ""
 echo "3. Анализ результатов..."
 
-# Собираем все результаты в один файл
-cat benchmark_results/*.log | grep -E "(Результаты:|Улучшение:|Тест [0-9]+:)" > benchmark_results/summary_${TIMESTAMP}.txt
+# Собираем все результаты в один файлs
+grep -hE "^(=== Тест [0-9]+ ===|OLD:|NEW:|Improvement:)" benchmark_results/*.log \
+    > benchmark_results/summary_${TIMESTAMP}.txt
 
 echo ""
 echo "=== ВСЕ ТЕСТЫ ЗАВЕРШЕНЫ ==="

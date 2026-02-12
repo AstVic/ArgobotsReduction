@@ -1,0 +1,240 @@
+=== Тест 1 ===
+OLD: 360.42 ms, steals=1, imbalance=2, eff=0.905
+NEW: 354.75 ms, steals=0, imbalance=0, eff=1.000
+Improvement: 1.57 %
+=== Тест 2 ===
+OLD: 2165.86 ms, steals=5, imbalance=2, eff=0.951
+NEW: 2202.86 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.71 %
+=== Тест 3 ===
+OLD: 1988.14 ms, steals=29, imbalance=24, eff=0.529
+NEW: 2973.30 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -49.55 %
+=== Тест 4 ===
+OLD: 6260.78 ms, steals=22, imbalance=2, eff=0.967
+NEW: 6387.87 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.03 %
+=== Тест 1 ===
+OLD: 355.16 ms, steals=0, imbalance=0, eff=1.000
+NEW: 353.47 ms, steals=0, imbalance=0, eff=1.000
+Improvement: 0.48 %
+=== Тест 2 ===
+OLD: 2173.26 ms, steals=5, imbalance=2, eff=0.951
+NEW: 2213.15 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.84 %
+=== Тест 3 ===
+OLD: 1984.36 ms, steals=28, imbalance=23, eff=0.540
+NEW: 2970.13 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -49.68 %
+=== Тест 4 ===
+OLD: 6257.56 ms, steals=21, imbalance=2, eff=0.967
+NEW: 6360.10 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.64 %
+=== Тест 1 ===
+OLD: 345.54 ms, steals=0, imbalance=0, eff=1.000
+NEW: 353.94 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.43 %
+=== Тест 2 ===
+OLD: 2150.81 ms, steals=5, imbalance=2, eff=0.951
+NEW: 3768.53 ms, steals=30, imbalance=39, eff=0.435
+Improvement: -75.21 %
+=== Тест 3 ===
+OLD: 1989.28 ms, steals=28, imbalance=24, eff=0.520
+NEW: 2264.31 ms, steals=40, imbalance=39, eff=0.339
+Improvement: -13.83 %
+=== Тест 4 ===
+OLD: 6302.39 ms, steals=21, imbalance=2, eff=0.967
+NEW: 8246.89 ms, steals=110, imbalance=31, eff=0.608
+Improvement: -30.85 %
+=== Тест 1 ===
+OLD: 353.47 ms, steals=0, imbalance=0, eff=1.000
+NEW: 358.77 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.50 %
+=== Тест 2 ===
+OLD: 2148.49 ms, steals=8, imbalance=2, eff=0.951
+NEW: 2211.86 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.95 %
+=== Тест 3 ===
+OLD: 1989.07 ms, steals=28, imbalance=23, eff=0.540
+NEW: 2956.96 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -48.66 %
+=== Тест 4 ===
+OLD: 6268.07 ms, steals=22, imbalance=2, eff=0.967
+NEW: 6376.70 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.73 %
+=== Тест 1 ===
+OLD: 359.87 ms, steals=0, imbalance=0, eff=1.000
+NEW: 345.75 ms, steals=0, imbalance=0, eff=1.000
+Improvement: 3.92 %
+=== Тест 2 ===
+OLD: 2147.23 ms, steals=5, imbalance=2, eff=0.951
+NEW: 2192.92 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.13 %
+=== Тест 3 ===
+OLD: 1985.29 ms, steals=29, imbalance=24, eff=0.529
+NEW: 2968.24 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -49.51 %
+=== Тест 4 ===
+OLD: 6282.33 ms, steals=21, imbalance=3, eff=0.952
+NEW: 6382.71 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.60 %
+=== Тест 1 ===
+OLD: 360.60 ms, steals=0, imbalance=0, eff=1.000
+NEW: 346.70 ms, steals=0, imbalance=0, eff=1.000
+Improvement: 3.85 %
+=== Тест 2 ===
+OLD: 2165.75 ms, steals=5, imbalance=2, eff=0.951
+NEW: 3487.35 ms, steals=33, imbalance=36, eff=0.446
+Improvement: -61.02 %
+=== Тест 3 ===
+OLD: 1986.80 ms, steals=29, imbalance=23, eff=0.540
+NEW: 2390.61 ms, steals=39, imbalance=35, eff=0.364
+Improvement: -20.32 %
+=== Тест 4 ===
+OLD: 6284.32 ms, steals=20, imbalance=2, eff=0.967
+NEW: 8210.08 ms, steals=106, imbalance=31, eff=0.603
+Improvement: -30.64 %
+=== Тест 1 ===
+OLD: 350.04 ms, steals=0, imbalance=0, eff=1.000
+NEW: 351.08 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -0.30 %
+=== Тест 2 ===
+OLD: 2159.74 ms, steals=5, imbalance=2, eff=0.951
+NEW: 2209.03 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.28 %
+=== Тест 3 ===
+OLD: 1974.56 ms, steals=29, imbalance=24, eff=0.520
+NEW: 2969.72 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -50.40 %
+=== Тест 4 ===
+OLD: 6273.19 ms, steals=19, imbalance=3, eff=0.952
+NEW: 6359.76 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.38 %
+=== Тест 1 ===
+OLD: 358.96 ms, steals=1, imbalance=2, eff=0.905
+NEW: 352.53 ms, steals=0, imbalance=0, eff=1.000
+Improvement: 1.79 %
+=== Тест 2 ===
+OLD: 2160.73 ms, steals=7, imbalance=2, eff=0.951
+NEW: 2200.68 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.85 %
+=== Тест 3 ===
+OLD: 1978.63 ms, steals=27, imbalance=23, eff=0.540
+NEW: 2961.13 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -49.66 %
+=== Тест 4 ===
+OLD: 6280.18 ms, steals=18, imbalance=2, eff=0.967
+NEW: 6386.29 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.69 %
+=== Тест 1 ===
+OLD: 345.15 ms, steals=0, imbalance=0, eff=1.000
+NEW: 355.10 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.88 %
+=== Тест 2 ===
+OLD: 2170.18 ms, steals=7, imbalance=2, eff=0.951
+NEW: 2466.98 ms, steals=51, imbalance=21, eff=0.543
+Improvement: -13.68 %
+=== Тест 3 ===
+OLD: 1983.02 ms, steals=29, imbalance=23, eff=0.540
+NEW: 2569.70 ms, steals=32, imbalance=32, eff=0.385
+Improvement: -29.59 %
+=== Тест 4 ===
+OLD: 6289.61 ms, steals=22, imbalance=2, eff=0.967
+NEW: 8415.83 ms, steals=118, imbalance=33, eff=0.588
+Improvement: -33.81 %
+=== Тест 1 ===
+OLD: 351.99 ms, steals=0, imbalance=0, eff=1.000
+NEW: 358.58 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.87 %
+=== Тест 2 ===
+OLD: 2183.30 ms, steals=7, imbalance=2, eff=0.951
+NEW: 2214.30 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.42 %
+=== Тест 3 ===
+OLD: 1986.73 ms, steals=29, imbalance=24, eff=0.529
+NEW: 2963.30 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -49.15 %
+=== Тест 4 ===
+OLD: 6286.97 ms, steals=22, imbalance=3, eff=0.952
+NEW: 6384.08 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.54 %
+=== Тест 1 ===
+OLD: 349.95 ms, steals=0, imbalance=0, eff=1.000
+NEW: 355.52 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.59 %
+=== Тест 2 ===
+OLD: 2154.87 ms, steals=5, imbalance=2, eff=0.951
+NEW: 2220.24 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -3.03 %
+=== Тест 3 ===
+OLD: 1991.74 ms, steals=28, imbalance=23, eff=0.540
+NEW: 2972.19 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -49.23 %
+=== Тест 4 ===
+OLD: 6270.75 ms, steals=22, imbalance=2, eff=0.967
+NEW: 6374.97 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.66 %
+=== Тест 1 ===
+OLD: 344.54 ms, steals=0, imbalance=0, eff=1.000
+NEW: 341.57 ms, steals=0, imbalance=0, eff=1.000
+Improvement: 0.86 %
+=== Тест 2 ===
+OLD: 2169.46 ms, steals=5, imbalance=2, eff=0.951
+NEW: 2778.94 ms, steals=44, imbalance=25, eff=0.519
+Improvement: -28.09 %
+=== Тест 3 ===
+OLD: 1983.87 ms, steals=28, imbalance=24, eff=0.520
+NEW: 2547.73 ms, steals=32, imbalance=32, eff=0.385
+Improvement: -28.42 %
+=== Тест 4 ===
+OLD: 6282.98 ms, steals=22, imbalance=2, eff=0.967
+NEW: 6319.46 ms, steals=8, imbalance=2, eff=0.967
+Improvement: -0.58 %
+=== Тест 1 ===
+OLD: 353.79 ms, steals=0, imbalance=0, eff=1.000
+NEW: 357.22 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -0.97 %
+=== Тест 2 ===
+OLD: 2181.79 ms, steals=7, imbalance=2, eff=0.951
+NEW: 2220.94 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.79 %
+=== Тест 3 ===
+OLD: 1977.02 ms, steals=30, imbalance=25, eff=0.510
+NEW: 2976.64 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -50.56 %
+=== Тест 4 ===
+OLD: 6264.04 ms, steals=18, imbalance=2, eff=0.967
+NEW: 6379.95 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.85 %
+=== Тест 1 ===
+OLD: 344.73 ms, steals=0, imbalance=0, eff=1.000
+NEW: 346.46 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -0.50 %
+=== Тест 2 ===
+OLD: 2158.16 ms, steals=7, imbalance=2, eff=0.951
+NEW: 2207.28 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.28 %
+=== Тест 3 ===
+OLD: 1981.33 ms, steals=29, imbalance=24, eff=0.520
+NEW: 2979.67 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -50.39 %
+=== Тест 4 ===
+OLD: 6285.02 ms, steals=21, imbalance=3, eff=0.952
+NEW: 6382.29 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -1.55 %
+=== Тест 1 ===
+OLD: 349.51 ms, steals=0, imbalance=0, eff=1.000
+NEW: 358.84 ms, steals=0, imbalance=0, eff=1.000
+Improvement: -2.67 %
+=== Тест 2 ===
+OLD: 2170.52 ms, steals=7, imbalance=2, eff=0.951
+NEW: 3808.20 ms, steals=31, imbalance=39, eff=0.435
+Improvement: -75.45 %
+=== Тест 3 ===
+OLD: 1983.01 ms, steals=28, imbalance=23, eff=0.540
+NEW: 2318.80 ms, steals=37, imbalance=36, eff=0.357
+Improvement: -16.93 %
+=== Тест 4 ===
+OLD: 6281.90 ms, steals=20, imbalance=2, eff=0.967
+NEW: 8287.89 ms, steals=108, imbalance=31, eff=0.608
+Improvement: -31.93 %
