@@ -1,8 +1,44 @@
 #!/bin/bash
 
+export C_INCLUDE_PATH="$HOME/local/argobots/include"
+export LIBRARY_PATH="$HOME/local/argobots/lib"
+export DYLD_LIBRARY_PATH="$HOME/local/argobots/lib"   
+
+set -euo pipefail
+
 echo "=== Бенчмарк планировщиков задач ==="
 echo "Запуск сначала старого, затем нового планировщика"
 echo ""
+
+resolve_argobots_flags() {
+    if command -v pkg-config >/dev/null 2>&1 && pkg-config --exists argobots; then
+        ABT_CFLAGS="$(pkg-config --cflags argobots)"
+        ABT_LIBS="$(pkg-config --libs argobots) -lpthread"
+        echo "Используем Argobots через pkg-config"
+        return
+    fi
+
+    local candidates=()
+    if [ -n "${ARGOBOTS_INSTALL_DIR:-}" ]; then
+        candidates+=("$ARGOBOTS_INSTALL_DIR")
+    fi
+    candidates+=("$HOME/argobots-install" "/usr/local" "/usr")
+
+    for dir in "${candidates[@]}"; do
+        if [ -f "$dir/include/abt.h" ] && [ -d "$dir/lib" ]; then
+            ABT_CFLAGS="-I$dir/include"
+            ABT_LIBS="-L$dir/lib -labt -lpthread"
+            echo "Используем Argobots из $dir"
+            return
+        fi
+    done
+
+    echo "Ошибка: не удалось найти Argobots (abt.h/libabt)." >&2
+    echo "Подсказка: установите ARGOBOTS_INSTALL_DIR или настройте pkg-config для argobots." >&2
+    exit 1
+}
+
+resolve_argobots_flags
 
 # Создаем директорию для результатов
 mkdir -p benchmark_results
@@ -11,12 +47,7 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 # Компилируем все
 echo "1. Компиляция программ..."
 make clean
-make
-
-if [ $? -ne 0 ]; then
-    echo "Ошибка компиляции!"
-    exit 1
-fi
+make 
 
 echo "2. Запуск тестов..."
 echo "   Каждый тест будет запущен дважды:"
@@ -39,11 +70,11 @@ for i in "${!CONFIGS[@]}"; do
     NUM_XSTREAMS=${CONFIG[0]}
     TASKS_PER_STREAM=${CONFIG[1]}
     COMPLEXITY_MODE=${CONFIG[2]}
-    
+
     echo "Тест $((i+1)): ${NUM_XSTREAMS} потоков, ${TASKS_PER_STREAM} задач/поток, сложность ${COMPLEXITY_MODE}"
-    
+
     # Создаем отдельный исполняемый файл для каждого теста
-    cat > benchmark_test_${i}.c << EOF
+    cat > benchmark_test_${i}.c << EOF2
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -54,20 +85,20 @@ for i in "${!CONFIGS[@]}"; do
 #define NUM_TASKS_PER_STREAM ${TASKS_PER_STREAM}
 #define COMPLEXITY_MODE ${COMPLEXITY_MODE}
 
-$(cat compare_schedulers_real.c | tail -n +2)
-EOF
-    
+$(tail -n +2 compare_schedulers_real.c)
+EOF2
+
     # Компилируем и запускаем
-    gcc -O2 -Wall -Wextra -I$HOME/argobots-install/include \
+    gcc -O2 -Wall -Wextra $ABT_CFLAGS \
         benchmark_test_${i}.c \
         abt_workstealing_scheduler.c \
         abt_workstealing_scheduler_cost_aware.c \
-        -L$HOME/argobots-install/lib -labt -lpthread \
+        $ABT_LIBS \
         -o benchmark_test_${i}
-    
+
     echo "  Запуск..."
     ./benchmark_test_${i} > benchmark_results/test_${i}_${TIMESTAMP}.log 2>&1
-    
+
     # Пауза между тестами
     sleep 3
 done
@@ -75,7 +106,7 @@ done
 echo ""
 echo "3. Анализ результатов..."
 
-# Собираем все результаты в один файлs
+# Собираем все результаты в один файл
 grep -hE "^(=== Тест [0-9]+ ===|OLD:|NEW:|Improvement:)" benchmark_results/*.log \
     > benchmark_results/summary_${TIMESTAMP}.txt
 
