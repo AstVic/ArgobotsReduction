@@ -39,3 +39,6 @@ workstealing_scheduler_cost_aware: $(workstealing_scheduler_cost_aware_SOURCES)
 # Build comparison test
 workstealing_scheduler_compare: $(workstealing_scheduler_compare_SOURCES)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+
+clean:
+	rm -f $(PROGRAMS)

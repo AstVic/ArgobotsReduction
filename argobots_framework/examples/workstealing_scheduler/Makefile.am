@@ -26,6 +26,6 @@ workstealing_scheduler_cost_aware_SOURCES = \
 
 # Исходники для теста сравнения
 workstealing_scheduler_compare_SOURCES = \
-	workstealing_scheduler_compare.c \
+	compare_schedulers_real.c \
 	abt_workstealing_scheduler.c \
 	abt_workstealing_scheduler_cost_aware.c
