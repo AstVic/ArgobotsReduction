@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "abt_reduction.h"
+#include "../argobots_framework/examples/workstealing_scheduler/abt_workstealing_scheduler.h"
+#include "../argobots_framework/examples/workstealing_scheduler/abt_workstealing_scheduler_cost_aware.h"
 
 #define Max(a, b) ((a) > (b) ? (a) : (b))
 #define L 384
@@ -14,6 +17,28 @@
 float A[L][L][L];
 float B[L][L][L];
 float MAXEPS = 0.5f;
+
+
+static ABT_sched *g_scheds = NULL;
+static int g_use_ws_scheduler = 0;
+static int g_use_cost_aware_scheduler = 0;
+
+static void configure_scheduler_mode(void) {
+    const char *scheduler_mode = getenv("ABT_WS_SCHEDULER");
+    if (!scheduler_mode || scheduler_mode[0] == '\0' || strcmp(scheduler_mode, "default") == 0) {
+        g_use_ws_scheduler = 0;
+        g_use_cost_aware_scheduler = 0;
+        return;
+    }
+    g_use_ws_scheduler = 1;
+    g_use_cost_aware_scheduler = (strcmp(scheduler_mode, "new") == 0 || strcmp(scheduler_mode, "cost-aware") == 0);
+}
+
+static inline void register_task_estimate_if_needed(int pool_id, double estimate) {
+    if (g_use_cost_aware_scheduler) {
+        ws_push_task_estimate(pool_id, estimate);
+    }
+}
 
 typedef struct {
     int start_i;
@@ -55,28 +80,50 @@ void update_B_thread(void *arg) {
 void initialize_argobots(reduction_context_t *reduction_context, int num_xstreams, int num_threads) {
     /* Initialize Argobots. */
     ABT_init(0, NULL);
-    
+    configure_scheduler_mode();
+
     reduction_context->num_xstreams = num_xstreams;
     reduction_context->xstreams = (ABT_xstream *)malloc(sizeof(ABT_xstream) * num_xstreams);
-    
+
     int num_pools = num_xstreams;
     reduction_context->num_pools = num_pools;
     reduction_context->pools = (ABT_pool *)malloc(sizeof(ABT_pool) * num_pools);
-    
+
     reduction_context->num_threads = num_threads;
     reduction_context->threads = (ABT_thread *)malloc(sizeof(ABT_thread) * num_threads);
-    
-    /* Get a primary execution stream. */
-    ABT_xstream_self(&(reduction_context->xstreams[0]));
 
-    /* Create secondary execution streams. */
-    for (int i = 1; i < num_xstreams; i++) {
-        ABT_xstream_create(ABT_SCHED_NULL, &(reduction_context->xstreams[i]));
-    }
+    if (g_use_ws_scheduler) {
+        g_scheds = (ABT_sched *)calloc(num_xstreams, sizeof(ABT_sched));
+        for (int i = 0; i < num_xstreams; i++) {
+            ABT_pool_create_basic(ABT_POOL_FIFO, ABT_POOL_ACCESS_MPMC, ABT_TRUE,
+                                  &(reduction_context->pools[i]));
+        }
 
-    /* Get default pools. */
-    for (int i = 0; i < num_xstreams; i++) {
-        ABT_xstream_get_main_pools(reduction_context->xstreams[i], 1, &(reduction_context->pools[i]));
+        if (g_use_cost_aware_scheduler) {
+            ABT_create_ws_scheds_cost_aware(num_xstreams, reduction_context->pools, g_scheds);
+        } else {
+            ABT_create_ws_scheds(num_xstreams, reduction_context->pools, g_scheds);
+        }
+
+        ABT_xstream_self(&(reduction_context->xstreams[0]));
+        ABT_xstream_set_main_sched(reduction_context->xstreams[0], g_scheds[0]);
+        for (int i = 1; i < num_xstreams; i++) {
+            ABT_xstream_create(g_scheds[i], &(reduction_context->xstreams[i]));
+        }
+    } else {
+        /* Get a primary execution stream. */
+        ABT_xstream_self(&(reduction_context->xstreams[0]));
+
+        /* Create secondary execution streams. */
+        for (int i = 1; i < num_xstreams; i++) {
+            ABT_xstream_create(ABT_SCHED_NULL, &(reduction_context->xstreams[i]));
+        }
+
+        /* Get default pools. */
+        for (int i = 0; i < num_xstreams; i++) {
+            ABT_xstream_get_main_pools(reduction_context->xstreams[i], 1,
+                                       &(reduction_context->pools[i]));
+        }
     }
 }
 
@@ -92,6 +139,11 @@ void finalize_argobots(reduction_context_t *reduction_context) {
         ABT_xstream_free(&reduction_context->xstreams[i]);
     }
     
+    if (g_scheds) {
+        free(g_scheds);
+        g_scheds = NULL;
+    }
+
     /* Finalize Argobots. */
     ABT_finalize();
 
@@ -149,6 +201,7 @@ int main(int argc, char **argv) {
             thread_args[t].end_i = (t == num_threads - 1) ? L - 1 : thread_args[t].start_i + rows_per_thread;
             thread_args[t].eps_local = &eps_values[t];
             
+            register_task_estimate_if_needed(t % reduction_context.num_pools, (double)(rows_per_thread * L * L));
             ABT_thread_create(
                 reduction_context.pools[t % reduction_context.num_pools],
                 update_A_thread,
@@ -166,6 +219,7 @@ int main(int argc, char **argv) {
         reduce_max_float(&reduction_context, eps_values, num_threads, &eps);
         
         for (int t = 0; t < num_threads; t++) {
+            register_task_estimate_if_needed(t % reduction_context.num_pools, (double)(rows_per_thread * L * L));
             ABT_thread_create(
                 reduction_context.pools[t % reduction_context.num_pools],
                 update_B_thread,

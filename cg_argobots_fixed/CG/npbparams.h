@@ -11,7 +11,7 @@
 #define RCOND   1.0e-1
 
 #define CONVERTDOUBLE  false
-#define COMPILETIME "17 Dec 2025"
+#define COMPILETIME "05 Mar 2026"
 #define NPBVERSION "3.3.1"
 #define CS1 "gcc"
 #define CS2 "$(CC)"

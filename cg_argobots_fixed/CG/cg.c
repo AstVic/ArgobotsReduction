@@ -40,13 +40,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <string.h>
 
 #include "globals.h"
 #include "randdp.h"
 #include "timers.h"
 #include "print_results.h"
 #include "abt_reduction.h"
-
+#include "../../argobots_framework/examples/workstealing_scheduler/abt_workstealing_scheduler.h"
+#include "../../argobots_framework/examples/workstealing_scheduler/abt_workstealing_scheduler_cost_aware.h"
 
 //---------------------------------------------------------------------
 /* common / main_int_mem / */
@@ -90,6 +92,21 @@ static logical timeron;
 #define DEFAULT_THREADS 4
 static reduction_context_t reduction_context;
 static ABT_barrier barrier;
+static ABT_sched *g_scheds = NULL;
+static int g_use_ws_scheduler = 0;
+static int g_use_cost_aware_scheduler = 0;
+
+static void configure_scheduler_mode(void) {
+    const char *scheduler_mode = getenv("ABT_WS_SCHEDULER");
+    if (!scheduler_mode || scheduler_mode[0] == '\0' || strcmp(scheduler_mode, "default") == 0) {
+        g_use_ws_scheduler = 0;
+        g_use_cost_aware_scheduler = 0;
+        return;
+    }
+
+    g_use_ws_scheduler = 1;
+    g_use_cost_aware_scheduler = (strcmp(scheduler_mode, "new") == 0 || strcmp(scheduler_mode, "cost-aware") == 0);
+}
 
 //---------------------------------------------------------------------
 
@@ -151,29 +168,52 @@ static void vecset(int n, double v[], int iv[], int *nzv, int i, double val);
 void initialize_argobots(int num_xstreams, int num_threads) {
     /* Initialize Argobots. */
     ABT_init(0, NULL);
-    
+    configure_scheduler_mode();
+
     reduction_context.num_xstreams = num_xstreams;
     reduction_context.xstreams = (ABT_xstream *)calloc(num_xstreams, sizeof(ABT_xstream));
-    
+
     int num_pools = num_xstreams;
     reduction_context.num_pools = num_pools;
     reduction_context.pools = (ABT_pool *)calloc(num_pools, sizeof(ABT_pool));
-    
+
     reduction_context.num_threads = num_threads;
     reduction_context.threads = (ABT_thread *)calloc(num_threads, sizeof(ABT_thread));
     
     /* Get a primary execution stream. */
     ABT_xstream_self(&(reduction_context.xstreams[0]));
+if (g_use_ws_scheduler) {
+        g_scheds = (ABT_sched *)calloc(num_xstreams, sizeof(ABT_sched));
+        for (int i = 0; i < num_xstreams; i++) {
+            ABT_pool_create_basic(ABT_POOL_FIFO, ABT_POOL_ACCESS_MPMC, ABT_TRUE,
+                                  &(reduction_context.pools[i]));
+        }
 
-    /* Create secondary execution streams. */
-    for (int i = 1; i < num_xstreams; i++) {
-        ABT_xstream_create(ABT_SCHED_NULL, &(reduction_context.xstreams[i]));
-    }
+        if (g_use_cost_aware_scheduler) {
+            ABT_create_ws_scheds_cost_aware(num_xstreams, reduction_context.pools, g_scheds);
+        } else {
+            ABT_create_ws_scheds(num_xstreams, reduction_context.pools, g_scheds);
+        }
 
-    /* Get default pools. */
-    for (int i = 0; i < num_xstreams; i++) {
-        ABT_xstream_get_main_pools(reduction_context.xstreams[i], 1, &(reduction_context.pools[i]));
-    }
+        ABT_xstream_self(&(reduction_context.xstreams[0]));
+        ABT_xstream_set_main_sched(reduction_context.xstreams[0], g_scheds[0]);
+        for (int i = 1; i < num_xstreams; i++) {
+            ABT_xstream_create(g_scheds[i], &(reduction_context.xstreams[i]));
+        }
+    } else {
+        /* Get a primary execution stream. */
+        ABT_xstream_self(&(reduction_context.xstreams[0]));
+
+        /* Create secondary execution streams. */
+        for (int i = 1; i < num_xstreams; i++) {
+            ABT_xstream_create(ABT_SCHED_NULL, &(reduction_context.xstreams[i]));
+        }
+
+        /* Get default pools. */
+        for (int i = 0; i < num_xstreams; i++) {
+            ABT_xstream_get_main_pools(reduction_context.xstreams[i], 1,
+                                       &(reduction_context.pools[i]));
+        }
 
     /* Create a barrier for the threads. */
     ABT_barrier_create(num_threads, &barrier);
@@ -193,6 +233,11 @@ void finalize_argobots() {
     
     /* Free the barrier */
     ABT_barrier_free(&barrier);
+
+    if (g_scheds) {
+        free(g_scheds);
+        g_scheds = NULL;
+    }
     
     /* Finalize Argobots. */
     ABT_finalize();
