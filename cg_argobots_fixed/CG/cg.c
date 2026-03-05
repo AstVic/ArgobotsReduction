@@ -214,7 +214,7 @@ if (g_use_ws_scheduler) {
             ABT_xstream_get_main_pools(reduction_context.xstreams[i], 1,
                                        &(reduction_context.pools[i]));
         }
-
+      }
     /* Create a barrier for the threads. */
     ABT_barrier_create(num_threads, &barrier);
 }

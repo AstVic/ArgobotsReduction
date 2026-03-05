@@ -15,7 +15,7 @@ resolve_argobots_flags() {
     if [ -n "${ARGOBOTS_INSTALL_DIR:-}" ]; then
         candidates+=("$ARGOBOTS_INSTALL_DIR")
     fi
-    candidates+=("$HOME/argobots-install" "/usr/local" "/usr")
+    candidates+=("$HOME/local/argobots" "$HOME/argobots-install" "/usr/local" "/usr")
 
     for dir in "${candidates[@]}"; do
         if [ -f "$dir/include/abt.h" ] && [ -d "$dir/lib" ]; then

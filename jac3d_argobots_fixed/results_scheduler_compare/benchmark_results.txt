@@ -1,0 +1,3 @@
+Argobots Jacobi-3D Scheduler Comparison
+=======================================
+old x=1 t=1 time=7.84000000000000000000 verification=SUCCESSFUL

@@ -11,10 +11,13 @@ mkdir -p "$OUT_DIR"
 echo "=== Existing benchmark scheduler comparison ==="
 echo "Output dir: $OUT_DIR"
 
+ABT_PREFIX=""
+
 resolve_argobots_flags() {
   if command -v pkg-config >/dev/null 2>&1 && pkg-config --exists argobots; then
     ABT_CFLAGS="$(pkg-config --cflags argobots)"
     ABT_LIBS="$(pkg-config --libs argobots) -lpthread"
+    ABT_PREFIX="$(pkg-config --variable=prefix argobots 2>/dev/null || true)"
     echo "Using Argobots via pkg-config"
     return
   fi
@@ -23,19 +26,20 @@ resolve_argobots_flags() {
   if [ -n "${ARGOBOTS_INSTALL_DIR:-}" ]; then
     candidates+=("$ARGOBOTS_INSTALL_DIR")
   fi
-  candidates+=("$HOME/argobots-install" "/usr/local" "/usr")
+candidates+=("$HOME/local/argobots" "$HOME/argobots-install" "/usr/local" "/usr")
 
   for dir in "${candidates[@]}"; do
     if [ -f "$dir/include/abt.h" ] && [ -d "$dir/lib" ]; then
       ABT_CFLAGS="-I$dir/include"
       ABT_LIBS="-L$dir/lib -labt -lpthread"
+      ABT_PREFIX="$dir"
       echo "Using Argobots from $dir"
       return
     fi
   done
 
   echo "Argobots not found (abt.h/libabt)." >&2
-  echo "Hint: set ARGOBOTS_INSTALL_DIR or configure pkg-config for argobots." >&2
+  echo "Hint: set ARGOBOTS_INSTALL_DIR, configure pkg-config for argobots, or run ./scripts/install_argobots.sh." >&2
   exit 1
 }
 
@@ -60,7 +64,21 @@ run_cg_argobots_fixed() {
 
   make -C cg_argobots_fixed clean >/dev/null
   make -C cg_argobots_fixed veryclean >/dev/null
-  make -C cg_argobots_fixed suite >/dev/null
+
+  if [ -n "$ABT_PREFIX" ]; then
+    make -C cg_argobots_fixed ARGOBOTS_INSTALL_DIR="$ABT_PREFIX" suite >/dev/null
+  else
+    local cg_c_inc="-I../common ${ABT_CFLAGS}"
+    local cg_cflags="-g -Wall -O3 ${ABT_CFLAGS}"
+    local cg_c_lib="-lm ${ABT_LIBS}"
+    local cg_clinkflags="-O3"
+    make -C cg_argobots_fixed \
+      C_INC="$cg_c_inc" \
+      CFLAGS="$cg_cflags" \
+      C_LIB="$cg_c_lib" \
+      CLINKFLAGS="$cg_clinkflags" \
+      suite >/dev/null
+  fi
 
   local csv="$OUT_DIR/cg_argobots_fixed_summary.csv"
   echo "scheduler,binary,xstreams,threads,time" > "$csv"
