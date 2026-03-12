@@ -1,0 +1,62 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-OMP-C) - CG Benchmark
+
+ Size:        1400
+ Iterations:                     15
+
+ Initialization time =           0.004 seconds
+
+   iteration           ||r||                 zeta
+        1       3.74165737284062E+01     9.9986441579071
+        2       9.99995492942327E-01     8.5733213532701
+        3       9.99999997574186E-01     8.5954510132718
+        4       1.00000000000000E+00     8.5969972317620
+        5       1.00000000000000E+00     8.5971549148670
+        6       9.99999999370525E-01     8.5971744302329
+        7       9.99999999689095E-01     8.5971770700484
+        8       9.99999998613406E-01     8.5971774421168
+        9       9.99999999664982E-01     8.5971774979240
+       10       9.99999999058860E-01     8.5971775051206
+       11       9.99999999388050E-01     8.5971775067902
+       12       9.99999974537352E-01     8.5971774721122
+       13       9.99889532669495E-01     8.5970225246834
+       14       9.99999999098542E-01     8.5971775065996
+       15       1.00000000000000E+00     8.5971775078648
+ Benchmark completed
+ VERIFICATION SUCCESSFUL
+ Zeta is     8.5971775078648E+00
+ Error is    1.2397255990878E-15
+
+
+ CG Benchmark Completed.
+ Class           =                        S
+ Size            =                     1400
+ Iterations      =                       15
+ Time in seconds =               0.04
+ Real time (nanos) =              12430000.00
+ Total threads   =                        1
+ Avail threads   =                        1
+ Mop/s total     =                  5362.35
+ Mop/s/thread    =                  5362.35
+ Operation type  =           floating point
+ Verification    =               SUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              12 Mar 2026
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm -L$(ARGOBOTS_INSTALL_DIR)/lib -labt -lp...
+    C_INC        = -I../common -I$(ARGOBOTS_INSTALL_DIR)/include
+    CFLAGS       = -g -Wall -O3
+    CLINKFLAGS   = -O3
+    RAND         = randdp
+
+--------------------------------------
+ Please send all errors/feedbacks to:
+ Center for Manycore Programming
+ cmp@aces.snu.ac.kr
+ http://aces.snu.ac.kr
+--------------------------------------
+

@@ -1,0 +1,62 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-OMP-C) - CG Benchmark
+
+ Size:       14000
+ Iterations:                     15
+
+ Initialization time =           0.382 seconds
+
+   iteration           ||r||                 zeta
+        1       1.17433598300602E+02    19.9997557584689
+        2       9.68363218032297E-01    16.9357063801687
+        3       9.99999998737793E-01    17.1198674729245
+        4       0.00000000000000E+00-47068774393843456.0000000000000
+        5       1.00000000000000E+00    17.1298354134241
+        6       0.00000000000000E+00-2349402499305937148887002933157167104.0000000000000
+        7       1.00000000000000E+00    17.1302157444142
+        8       1.00000000000000E+00    17.1302339439829
+        9       9.99999999719706E-01    17.1302349822086
+       10       0.00000000000000E+00-1026201617695002880.0000000000000
+       11       2.95855549338119E+01    19.8239970348977
+       12       2.12480485175045E+16    20.0000000000000
+       13       1.71764872531249E+49    20.0000000000000
+       14       1.23851667031135E+115    20.0000000000000
+       15                        NAN                 nan
+ Benchmark completed
+ VERIFICATION FAILED
+ Zeta                                 NAN
+ The correct zeta is  1.7130235054029E+01
+
+
+ CG Benchmark Completed.
+ Class           =                        A
+ Size            =                    14000
+ Iterations      =                       15
+ Time in seconds =               4.44
+ Real time (nanos) =             1117504000.00
+ Total threads   =                        1
+ Avail threads   =                        1
+ Mop/s total     =                  1339.11
+ Mop/s/thread    =                  1339.11
+ Operation type  =           floating point
+ Verification    =             UNSUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              12 Mar 2026
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm -L$(ARGOBOTS_INSTALL_DIR)/lib -labt -lp...
+    C_INC        = -I../common -I$(ARGOBOTS_INSTALL_DIR)/include
+    CFLAGS       = -g -Wall -O3
+    CLINKFLAGS   = -O3
+    RAND         = randdp
+
+--------------------------------------
+ Please send all errors/feedbacks to:
+ Center for Manycore Programming
+ cmp@aces.snu.ac.kr
+ http://aces.snu.ac.kr
+--------------------------------------
+

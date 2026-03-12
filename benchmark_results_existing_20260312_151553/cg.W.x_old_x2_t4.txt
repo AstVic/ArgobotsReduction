@@ -1,0 +1,62 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-OMP-C) - CG Benchmark
+
+ Size:        7000
+ Iterations:                     15
+
+ Initialization time =           0.037 seconds
+
+   iteration           ||r||                 zeta
+        1       8.26832332559346E+01    11.9996946799585
+        2       5.00783381108477E+04    12.0000719807658
+        3       5.33132694778286E+22    12.0000000000000
+        4       2.71426072233717E+59    12.0000000000000
+        5       6.19305649446519E+132    12.0000000000000
+        6                        NAN                 nan
+        7                        NAN                 nan
+        8                        NAN                 nan
+        9                        NAN                 nan
+       10                        NAN                 nan
+       11                        NAN                 nan
+       12                        NAN                 nan
+       13                        NAN                 nan
+       14                        NAN                 nan
+       15                        NAN                 nan
+ Benchmark completed
+ VERIFICATION FAILED
+ Zeta                                 NAN
+ The correct zeta is  1.0362595087124E+01
+
+
+ CG Benchmark Completed.
+ Class           =                        W
+ Size            =                     7000
+ Iterations      =                       15
+ Time in seconds =               0.40
+ Real time (nanos) =              99022000.00
+ Total threads   =                        1
+ Avail threads   =                        1
+ Mop/s total     =                  4247.84
+ Mop/s/thread    =                  4247.84
+ Operation type  =           floating point
+ Verification    =             UNSUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              12 Mar 2026
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm -L$(ARGOBOTS_INSTALL_DIR)/lib -labt -lp...
+    C_INC        = -I../common -I$(ARGOBOTS_INSTALL_DIR)/include
+    CFLAGS       = -g -Wall -O3
+    CLINKFLAGS   = -O3
+    RAND         = randdp
+
+--------------------------------------
+ Please send all errors/feedbacks to:
+ Center for Manycore Programming
+ cmp@aces.snu.ac.kr
+ http://aces.snu.ac.kr
+--------------------------------------
+
