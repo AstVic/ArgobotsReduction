@@ -1,7 +1,0 @@
-scheduler,binary,xstreams,threads,time
-old,cg.A.x,1,1,4.49
-old,cg.A.x,2,4,2.35
-old,cg.A.x,4,8,1.28
-old,cg.B.x,1,1,183.93
-old,cg.B.x,2,4,97.09
-old,cg.B.x,4,8,51.95

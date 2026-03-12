@@ -96,6 +96,26 @@ static ABT_sched *g_scheds = NULL;
 static int g_use_ws_scheduler = 0;
 static int g_use_cost_aware_scheduler = 0;
 
+static inline void register_task_estimate_if_needed(int pool_id, double estimate) {
+    if (g_use_cost_aware_scheduler) {
+        ws_push_task_estimate(pool_id, estimate > 0.0 ? estimate : 1.0);
+    }
+}
+
+static inline void create_thread_with_estimate(int pool_id,
+                                               void (*thread_func)(void *),
+                                               void *arg,
+                                               ABT_thread *thread,
+                                               double estimate) {
+    register_task_estimate_if_needed(pool_id, estimate);
+    ABT_thread_create(reduction_context.pools[pool_id],
+                      thread_func,
+                      arg,
+                      ABT_THREAD_ATTR_NULL,
+                      thread);
+}
+
+
 static void configure_scheduler_mode(void) {
     const char *scheduler_mode = getenv("ABT_WS_SCHEDULER");
     if (!scheduler_mode || scheduler_mode[0] == '\0' || strcmp(scheduler_mode, "default") == 0) {
@@ -321,13 +341,12 @@ void init_random_number_generator() {
   init_random_number_generator_thread_args_t* args = (init_random_number_generator_thread_args_t*)malloc(sizeof(init_random_number_generator_thread_args_t) * reduction_context.num_threads);
   for (int i = 0; i < reduction_context.num_threads; i++) {
     args[i].thread_id = i;
-    ABT_thread_create(
-        reduction_context.pools[i % reduction_context.num_pools],
-        init_random_number_generator_thread,
-        &args[i],
-        ABT_THREAD_ATTR_NULL,
-        &reduction_context.threads[i]
-    );
+    int pool_id = i % reduction_context.num_pools;
+    create_thread_with_estimate(pool_id,
+                                init_random_number_generator_thread,
+                                &args[i],
+                                &reduction_context.threads[i],
+                                (double)(NA + 1) / reduction_context.num_threads);
   }
 
   for (int i = 0; i < reduction_context.num_threads; i++) {
@@ -359,13 +378,12 @@ void set_starting_vector_to_ones() {
   set_starting_vector_to_ones_thread_args_t* args = (set_starting_vector_to_ones_thread_args_t*)malloc(sizeof(set_starting_vector_to_ones_thread_args_t) * reduction_context.num_threads);
   for (int i = 0; i < reduction_context.num_threads; i++) {
     args[i].thread_id = i;
-    ABT_thread_create(
-        reduction_context.pools[i % reduction_context.num_pools],
-        set_starting_vector_to_ones_thread,
-        &args[i],
-        ABT_THREAD_ATTR_NULL,
-        &reduction_context.threads[i]
-    );
+    int pool_id = i % reduction_context.num_pools;
+    create_thread_with_estimate(pool_id,
+                                set_starting_vector_to_ones_thread,
+                                &args[i],
+                                &reduction_context.threads[i],
+                                (double)(NA + 1) / reduction_context.num_threads);
   }
 
   for (int i = 0; i < reduction_context.num_threads; i++) {
@@ -415,13 +433,12 @@ norm_temps_result calculate_norm_temps() {
         args[i].thread_id = i;
         args[i].norm_temp1_local = &norm_temp1_values[i];
         args[i].norm_temp2_local = &norm_temp2_values[i];
-        ABT_thread_create(
-            reduction_context.pools[i % reduction_context.num_pools],
-            calculate_norm_temps_thread,
-            &args[i],
-            ABT_THREAD_ATTR_NULL,
-            &reduction_context.threads[i]
-        );
+        int pool_id = i % reduction_context.num_pools;
+        create_thread_with_estimate(pool_id,
+                                    calculate_norm_temps_thread,
+                                    &args[i],
+                                    &reduction_context.threads[i],
+                                    (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
     }
 
     for (int i = 0; i < reduction_context.num_threads; i++) {
@@ -470,13 +487,12 @@ void normalize_z(double norm_temp2) {
     for (int i = 0; i < reduction_context.num_threads; i++) {
         args[i].thread_id = i;
         args[i].norm_temp2 = norm_temp2;
-        ABT_thread_create(
-            reduction_context.pools[i % reduction_context.num_pools],
-            normalize_z_thread,
-            &args[i],
-            ABT_THREAD_ATTR_NULL,
-            &reduction_context.threads[i]
-        );
+        int pool_id = i % reduction_context.num_pools;
+        create_thread_with_estimate(pool_id,
+                                    normalize_z_thread,
+                                    &args[i],
+                                    &reduction_context.threads[i],
+                                    (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
     }
 
     for (int i = 0; i < reduction_context.num_threads; i++) {
@@ -902,17 +918,12 @@ static void conj_grad(int colidx[],
     // Initialize the CG algorithm:
     //---------------------------------------------------------------------
     for (int i = 0; i < reduction_context.num_threads; i++) {
-        ABT_thread_create(
-            reduction_context.pools[i % reduction_context.num_pools],
-            conj_grad_init_thread,
-            &args[i],
-            ABT_THREAD_ATTR_NULL,
-            &reduction_context.threads[i]
-        );
-    }
-    for (int i = 0; i < reduction_context.num_threads; i++) {
-        ABT_thread_join(reduction_context.threads[i]);
-        ABT_thread_free(&reduction_context.threads[i]);
+        int pool_id = i % reduction_context.num_pools;
+        create_thread_with_estimate(pool_id,
+                                    conj_grad_init_thread,
+                                    &args[i],
+                                    &reduction_context.threads[i],
+                                    (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
     }
     
     //---------------------------------------------------------------------
@@ -920,13 +931,12 @@ static void conj_grad(int colidx[],
     // Now, obtain the norm of r: First, sum squares of r elements locally...
     //---------------------------------------------------------------------
     for (int i = 0; i < reduction_context.num_threads; i++) {
-        ABT_thread_create(
-            reduction_context.pools[i % reduction_context.num_pools],
-            conj_grad_rho_thread,
-            &args[i],
-            ABT_THREAD_ATTR_NULL,
-            &reduction_context.threads[i]
-        );
+        int pool_id = i % reduction_context.num_pools;
+        create_thread_with_estimate(pool_id,
+                                    conj_grad_rho_thread,
+                                    &args[i],
+                                    &reduction_context.threads[i],
+                                    (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
     }
     for (int i = 0; i < reduction_context.num_threads; i++) {
         ABT_thread_join(reduction_context.threads[i]);
@@ -952,13 +962,12 @@ static void conj_grad(int colidx[],
         // q = A.p
         //---------------------------------------------------------------------
         for (int i = 0; i < reduction_context.num_threads; i++) {
-            ABT_thread_create(
-                reduction_context.pools[i % reduction_context.num_pools],
-                conj_grad_q_thread,
-                &args[i],
-                ABT_THREAD_ATTR_NULL,
-                &reduction_context.threads[i]
-            );
+            int pool_id = i % reduction_context.num_pools;
+            create_thread_with_estimate(pool_id,
+                                        conj_grad_q_thread,
+                                        &args[i],
+                                        &reduction_context.threads[i],
+                                        (double)(lastrow - firstrow + 1) * NONZER / reduction_context.num_threads);
         }
         for (int i = 0; i < reduction_context.num_threads; i++) {
             ABT_thread_join(reduction_context.threads[i]);
@@ -969,13 +978,12 @@ static void conj_grad(int colidx[],
         // Obtain p.q
         //---------------------------------------------------------------------
         for (int i = 0; i < reduction_context.num_threads; i++) {
-            ABT_thread_create(
-                reduction_context.pools[i % reduction_context.num_pools],
-                conj_grad_d_thread,
-                &args[i],
-                ABT_THREAD_ATTR_NULL,
-                &reduction_context.threads[i]
-            );
+            int pool_id = i % reduction_context.num_pools;
+            create_thread_with_estimate(pool_id,
+                                        conj_grad_d_thread,
+                                        &args[i],
+                                        &reduction_context.threads[i],
+                                        (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
         }
         for (int i = 0; i < reduction_context.num_threads; i++) {
             ABT_thread_join(reduction_context.threads[i]);
@@ -994,13 +1002,12 @@ static void conj_grad(int colidx[],
         //---------------------------------------------------------------------
         for (int i = 0; i < reduction_context.num_threads; i++) {
             args[i].alpha = alpha;
-            ABT_thread_create(
-                reduction_context.pools[i % reduction_context.num_pools],
-                conj_grad_update_thread,
-                &args[i],
-                ABT_THREAD_ATTR_NULL,
-                &reduction_context.threads[i]
-            );
+            int pool_id = i % reduction_context.num_pools;
+            create_thread_with_estimate(pool_id,
+                                        conj_grad_update_thread,
+                                        &args[i],
+                                        &reduction_context.threads[i],
+                                        (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
         }
         for (int i = 0; i < reduction_context.num_threads; i++) {
             ABT_thread_join(reduction_context.threads[i]);
@@ -1018,13 +1025,12 @@ static void conj_grad(int colidx[],
         //---------------------------------------------------------------------
         for (int i = 0; i < reduction_context.num_threads; i++) {
             args[i].beta = beta;
-            ABT_thread_create(
-                reduction_context.pools[i % reduction_context.num_pools],
-                conj_grad_p_thread,
-                &args[i],
-                ABT_THREAD_ATTR_NULL,
-                &reduction_context.threads[i]
-            );
+            int pool_id = i % reduction_context.num_pools;
+            create_thread_with_estimate(pool_id,
+                                        conj_grad_p_thread,
+                                        &args[i],
+                                        &reduction_context.threads[i],
+                                        (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
         }
         for (int i = 0; i < reduction_context.num_threads; i++) {
             ABT_thread_join(reduction_context.threads[i]);
@@ -1034,13 +1040,12 @@ static void conj_grad(int colidx[],
     
     // Calculate final residual norm
     for (int i = 0; i < reduction_context.num_threads; i++) {
-        ABT_thread_create(
-            reduction_context.pools[i % reduction_context.num_pools],
-            conj_grad_final_thread,
-            &args[i],
-            ABT_THREAD_ATTR_NULL,
-            &reduction_context.threads[i]
-        );
+        int pool_id = i % reduction_context.num_pools;
+        create_thread_with_estimate(pool_id,
+                                    conj_grad_final_thread,
+                                    &args[i],
+                                    &reduction_context.threads[i],
+                                    (double)(lastcol - firstcol + 1) / reduction_context.num_threads);
     }
     for (int i = 0; i < reduction_context.num_threads; i++) {
         ABT_thread_join(reduction_context.threads[i]);
