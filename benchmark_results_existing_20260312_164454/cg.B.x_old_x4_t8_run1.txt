@@ -1,0 +1,122 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-OMP-C) - CG Benchmark
+
+ Size:       75000
+ Iterations:                     75
+
+ Initialization time =           1.043 seconds
+
+   iteration           ||r||                 zeta
+        1       1.06304642776711E+14    60.0000000000000
+        2       3.27746025168685E+16    60.0000000000000
+        3                        NAN                 nan
+        4                        NAN                 nan
+        5                        NAN                 nan
+        6                        NAN                 nan
+        7                        NAN                 nan
+        8                        NAN                 nan
+        9                        NAN                 nan
+       10                        NAN                 nan
+       11                        NAN                 nan
+       12                        NAN                 nan
+       13                        NAN                 nan
+       14                        NAN                 nan
+       15                        NAN                 nan
+       16                        NAN                 nan
+       17                        NAN                 nan
+       18                        NAN                 nan
+       19                        NAN                 nan
+       20                        NAN                 nan
+       21                        NAN                 nan
+       22                        NAN                 nan
+       23                        NAN                 nan
+       24                        NAN                 nan
+       25                        NAN                 nan
+       26                        NAN                 nan
+       27                        NAN                 nan
+       28                        NAN                 nan
+       29                        NAN                 nan
+       30                        NAN                 nan
+       31                        NAN                 nan
+       32                        NAN                 nan
+       33                        NAN                 nan
+       34                        NAN                 nan
+       35                        NAN                 nan
+       36                        NAN                 nan
+       37                        NAN                 nan
+       38                        NAN                 nan
+       39                        NAN                 nan
+       40                        NAN                 nan
+       41                        NAN                 nan
+       42                        NAN                 nan
+       43                        NAN                 nan
+       44                        NAN                 nan
+       45                        NAN                 nan
+       46                        NAN                 nan
+       47                        NAN                 nan
+       48                        NAN                 nan
+       49                        NAN                 nan
+       50                        NAN                 nan
+       51                        NAN                 nan
+       52                        NAN                 nan
+       53                        NAN                 nan
+       54                        NAN                 nan
+       55                        NAN                 nan
+       56                        NAN                 nan
+       57                        NAN                 nan
+       58                        NAN                 nan
+       59                        NAN                 nan
+       60                        NAN                 nan
+       61                        NAN                 nan
+       62                        NAN                 nan
+       63                        NAN                 nan
+       64                        NAN                 nan
+       65                        NAN                 nan
+       66                        NAN                 nan
+       67                        NAN                 nan
+       68                        NAN                 nan
+       69                        NAN                 nan
+       70                        NAN                 nan
+       71                        NAN                 nan
+       72                        NAN                 nan
+       73                        NAN                 nan
+       74                        NAN                 nan
+       75                        NAN                 nan
+ Benchmark completed
+ VERIFICATION FAILED
+ Zeta                                 NAN
+ The correct zeta is  2.2712745482631E+01
+
+
+ CG Benchmark Completed.
+ Class           =                        B
+ Size            =                    75000
+ Iterations      =                       75
+ Time in seconds =              48.50
+ Real time (nanos) =             12161251000.00
+ Total threads   =                        1
+ Avail threads   =                        1
+ Mop/s total     =                  4498.61
+ Mop/s/thread    =                  4498.61
+ Operation type  =           floating point
+ Verification    =             UNSUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              12 Mar 2026
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm -L$(ARGOBOTS_INSTALL_DIR)/lib -labt -lp...
+    C_INC        = -I../common -I$(ARGOBOTS_INSTALL_DIR)/include
+    CFLAGS       = -g -Wall -O3
+    CLINKFLAGS   = -O3
+    RAND         = randdp
+
+--------------------------------------
+ Please send all errors/feedbacks to:
+ Center for Manycore Programming
+ cmp@aces.snu.ac.kr
+ http://aces.snu.ac.kr
+--------------------------------------
+
